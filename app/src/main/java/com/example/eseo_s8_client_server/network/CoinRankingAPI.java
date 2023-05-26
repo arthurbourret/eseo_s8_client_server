@@ -1,6 +1,6 @@
 package com.example.eseo_s8_client_server.network;
 
-import com.example.eseo_s8_client_server.models.PriceResponse;
+import com.example.eseo_s8_client_server.models.ListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,6 +13,6 @@ public interface CoinRankingAPI {
             "x-rapidapi-host: coinranking1.p.rapidapi.com",
             "x-rapidapi-key: 4044e6d441msh112775bd9365d18p1c6ef5jsn79b99212405b"
     })
-    @GET("/coin/Qwsogvtv82FCd/price")
-    Call<PriceResponse> getBitcoinPrice();
+    @GET("/coins")
+    Call<ListResponse> getBitcoinCoins();
 }

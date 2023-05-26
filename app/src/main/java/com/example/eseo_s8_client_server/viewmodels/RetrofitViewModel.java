@@ -1,11 +1,12 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eseo_s8_client_server.models.PriceResponse;
-import com.example.eseo_s8_client_server.models.SampleModel;
+import com.example.eseo_s8_client_server.models.CoinsData;
+import com.example.eseo_s8_client_server.models.ListResponse;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 
 import retrofit2.Call;
@@ -13,32 +14,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RetrofitViewModel extends ViewModel implements IViewModel {
+public class RetrofitViewModel extends ViewModel implements IViewModel<CoinsData> {
+    private final MutableLiveData<CoinsData> data = new MutableLiveData<>();
 
-    private final MutableLiveData<SampleModel> data = new MutableLiveData<>();
-
-    public LiveData<SampleModel> getData() {
+    public LiveData<CoinsData> getData() {
         return data;
     }
 
-    @Override
     public void generateNextValue() {
-        RetrofitNetworkManager.coinRankingAPI.getBitcoinPrice().enqueue(new Callback<PriceResponse>() {
+        RetrofitNetworkManager.coinRankingAPI.getBitcoinCoins().enqueue(new Callback<ListResponse>() {
             @Override
-            public void onResponse(Call<PriceResponse> call, Response<PriceResponse> response) {
-                if (response.body() != null) {
-                    handleResponse(response.body());
-                }
+            public void onResponse(@NonNull Call<ListResponse> call, @NonNull Response<ListResponse> response) {
+                if (response.body() == null) return;
+                handleResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<PriceResponse> call, Throwable t) {
-                // NO-OP
+            public void onFailure(@NonNull Call<ListResponse> call, @NonNull Throwable t) {
+                t.printStackTrace();
             }
         });
     }
 
-    private void handleResponse(PriceResponse response) {
-        data.postValue(new SampleModel(response.getData().getPrice()));
+    private void handleResponse(ListResponse response) {
+        CoinsData coinsData = new CoinsData(response.getData());
+        data.postValue(coinsData);
     }
 }

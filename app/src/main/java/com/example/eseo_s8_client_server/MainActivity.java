@@ -1,34 +1,59 @@
 package com.example.eseo_s8_client_server;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.viewmodels.CoinRecyclerAdapter;
 import com.example.eseo_s8_client_server.viewmodels.IViewModel;
-import com.example.eseo_s8_client_server.viewmodels.MainViewModel;
+import com.example.eseo_s8_client_server.viewmodels.RetrofitViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    private IViewModel viewModel;
+    private IViewModel<CoinsData> viewModel;
+    private CoinRecyclerAdapter adapter;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        adapter = new CoinRecyclerAdapter(this);
+        RecyclerView recyclerView = findViewById(R.id.listCoins);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
 
-        CoinRecyclerAdapter adapter = new CoinRecyclerAdapter();
+        viewModel = new ViewModelProvider(this).get(RetrofitViewModel.class);
+        viewModel.generateNextValue();
 
-        RecyclerView questionRecyclerView = findViewById(R.id.listCoins);
-        questionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        questionRecyclerView.setHasFixedSize(true);
-        questionRecyclerView.setAdapter(adapter);
+        findViewById(R.id.sync).setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
+            viewModel.generateNextValue();
+        });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateCoins(CoinsData coinsData) {
+        adapter.setCoins(coinsData);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.getData().observe(this, this::updateCoins);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewModel.getData().removeObservers(this);
     }
 }

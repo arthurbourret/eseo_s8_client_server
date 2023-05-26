@@ -1,14 +1,22 @@
 package com.example.eseo_s8_client_server.models;
 
-public class ListResponse extends GenericResponse {
+public class ListResponse {
+    private String status;
+    private Data data;
 
-    private CoinsData data;
-
-    public CoinsData getData() {
-        return data;
+    public String getStatus() {
+        return status;
     }
 
-    public void setData(CoinsData data) {
-        this.data = data;
+    public Coin[] getData() {
+        return data.getCoins();
+    }
+
+    class Data {
+        private Coin[] coins;
+
+        public Coin[] getCoins() {
+            return coins;
+        }
     }
 }

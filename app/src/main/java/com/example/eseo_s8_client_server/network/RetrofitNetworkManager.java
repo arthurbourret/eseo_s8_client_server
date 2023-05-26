@@ -6,7 +6,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitNetworkManager {
-
     public static final CoinRankingAPI coinRankingAPI;
 
     static {
