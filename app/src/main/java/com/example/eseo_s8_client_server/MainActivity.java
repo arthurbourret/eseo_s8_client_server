@@ -1,6 +1,7 @@
 package com.example.eseo_s8_client_server;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -17,11 +18,13 @@ import com.example.eseo_s8_client_server.viewmodels.RetrofitViewModel;
 public class MainActivity extends AppCompatActivity {
     private IViewModel<CoinsData> viewModel;
     private CoinRecyclerAdapter adapter;
+    private static Context APPLICATION_CONTEXT;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        APPLICATION_CONTEXT = getApplicationContext();
         setContentView(R.layout.activity_main);
 
         adapter = new CoinRecyclerAdapter(this);
@@ -55,5 +58,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         viewModel.getData().removeObservers(this);
+    }
+
+    public static Context getContext(){
+        return APPLICATION_CONTEXT;
     }
 }
