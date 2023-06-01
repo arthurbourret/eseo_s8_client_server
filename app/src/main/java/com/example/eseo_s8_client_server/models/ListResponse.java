@@ -12,7 +12,7 @@ public class ListResponse {
         return data.getCoins();
     }
 
-    class Data {
+    static class Data {
         private Coin[] coins;
 
         public Coin[] getCoins() {

@@ -21,18 +21,22 @@ public class CoinView extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void initCoin(Coin coin)
-    {
+    public void initCoin(Coin coin) {
+
         imageView = itemView.findViewById(R.id.icon_coin);
         ((TextView) itemView.findViewById(R.id.name_coin)).setText(coin.getName());
         ((TextView) itemView.findViewById(R.id.symbol_coin)).setText(coin.getSymbol());
-        ((TextView) itemView.findViewById(R.id.price_coin)).setText(coin.getPrice()+"");
-        ((TextView) itemView.findViewById(R.id.change_coin)).setText(coin.getChange()+"");
+        ((TextView) itemView.findViewById(R.id.price_coin)).setText(coin.getPrice() + "");
+        ((TextView) itemView.findViewById(R.id.change_coin)).setText(coin.getChange() + "");
+
+        if (coin.isFavorite()) setFavorite();
+        else unsetFavorite();
 
         try {
             int color = Color.parseColor(coin.getColor());
             itemView.findViewById(R.id.couleur_coin).setBackgroundColor(color);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private void setFavorite() {
@@ -40,7 +44,7 @@ public class CoinView extends RecyclerView.ViewHolder {
     }
 
     private void unsetFavorite() {
-        itemView.findViewById(R.id.favorite).setBackgroundResource(R.drawable.star_empty);
+        itemView.findViewById(R.id.favorite).setBackgroundResource(0);
     }
 
     public void setImageIcon(Drawable icon) {

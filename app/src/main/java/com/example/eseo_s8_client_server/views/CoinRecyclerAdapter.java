@@ -1,6 +1,5 @@
 package com.example.eseo_s8_client_server.views;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,32 +15,25 @@ import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
 import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
-import com.example.eseo_s8_client_server.viewmodels.IViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IconViewModel;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
-    private final IViewModel<Coin> viewModel;
     private final ViewModelStoreOwner owner;
+    private final CoinViewModel coinViewModel;
+    private final IconViewModel iconViewModel;
+
+    private CoinsData coins;
+
     private boolean clickAllowed = true;
     private final ChangeClick toggleClickAllowed = () -> clickAllowed = !clickAllowed;
 
-    private CoinsData coins;
-    private final IconViewModel loader;
-    private final Map<String, Drawable> icons;
-
     public CoinRecyclerAdapter(ViewModelStoreOwner owner) {
         this.owner = owner;
-        this.viewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
-
-        this.icons = new HashMap<>();
-        this.loader = IconViewModel.getInstance();
+        this.coinViewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
+        this.iconViewModel = new ViewModelProvider(owner).get(IconViewModel.class);
     }
 
     public void setCoins(CoinsData coins) {
-        this.icons.clear();
         if (coins != null) this.coins = coins;
     }
 
@@ -57,39 +49,36 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     public void onBindViewHolder(@NonNull CoinView holder, int position) {
         Coin coin = coins.getCoin(position);
         String uuid = coin.getUuid();
+
         // set holder
         holder.initCoin(coin);
 
-        // give image to holder
-        holder.setImageIcon(null);
-        if (icons.containsKey(uuid) && icons.get(uuid) != null) {
-            holder.setImageIcon(icons.get(uuid));
-            // TODO setIcon of pop up
-        } else loader.loadIcon(coin.getIconUrl(), icon -> {
-            icons.put(uuid, icon);
-            holder.setImageIcon(icon);
-            // TODO setIcon of pop up
-        });
+        // set holder icon
+        holder.setImageIcon(iconViewModel.getIcon(uuid));
+        if (!iconViewModel.hasIcon(uuid))
+            iconViewModel.fetchData(coin.getUuid(), coin.getIconUrl());
+        iconViewModel.getData().observe((LifecycleOwner) owner,
+                icons -> holder.setImageIcon(icons.get(uuid)));
 
         // set on click
         holder.setOnClickListener(v -> onViewClickHandler(v, uuid));
-    }
-
-    @Override
-    public int getItemCount() {
-        return (coins == null) ? 0 : coins.size();
     }
 
     private void onViewClickHandler(View v, String uuid) {
         if (!clickAllowed) return;
 
         toggleClickAllowed.changeClickAllowed();
-        viewModel.fetchData(uuid);
-        viewModel.getData().observe((LifecycleOwner) owner, res -> {
+        coinViewModel.fetchData(uuid);
+        coinViewModel.getData().observe((LifecycleOwner) owner, res -> {
             // display pop up
             CoinPopUp popup = new CoinPopUp(v, res, toggleClickAllowed);
             popup.displayPopUp();
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return (coins == null) ? 0 : coins.size();
     }
 
     public interface ChangeClick {

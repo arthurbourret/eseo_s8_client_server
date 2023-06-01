@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.eseo_s8_client_server.CoinApplication;
-import com.example.eseo_s8_client_server.views.MainActivity;
 
 public class PreferencesHelper {
     private static PreferencesHelper INSTANCE;

@@ -1,6 +1,5 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
-import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,76 +7,83 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.caverock.androidsvg.SVG;
 import com.example.eseo_s8_client_server.CoinApplication;
+import com.example.eseo_s8_client_server.network.NetworkCallBack;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
 
-public class IconViewModel {
-    // TODO adapt to IViewModel
+public class IconViewModel extends ViewModel implements IViewModel<Map<String, Drawable>> {
+    private final Map<String, Drawable> icons;
+    private final MutableLiveData<Map<String, Drawable>> data = new MutableLiveData<>();
 
-    private final Resources resources;
-    @SuppressLint("StaticFieldLeak")
-    private static final IconViewModel SINGLETON = new IconViewModel();
     private final OkHttpClient client = new OkHttpClient();
+    private final Resources resources;
 
-    private IconViewModel() {
-        resources = CoinApplication.getContext().getResources();
+    public IconViewModel() {
+        this.resources = CoinApplication.getContext().getResources();
+        this.icons = new HashMap<>();
     }
 
-    public static IconViewModel getInstance() {
-        return SINGLETON;
+    public boolean hasIcon(String uuid) {
+        return icons.containsKey(uuid) && icons.get(uuid) != null;
     }
 
-    public void loadIcon(String url, CallBackIcon callback) {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+    public Drawable getIcon(String uuid) {
+        return icons.get(uuid);
+    }
 
-        client.newCall(request).enqueue(new Callback() {
+    @Override
+    public LiveData<Map<String, Drawable>> getData() {
+        return data;
+    }
+
+    @Override
+    public void fetchData(Object... parameters) {
+        if (parameters == null || parameters.length < 1
+                || (!(parameters[0] instanceof String))
+                || (!(parameters[1] instanceof String)))
+            return;
+        String uuid = (String) parameters[0];
+        String url = (String) parameters[1];
+
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new NetworkCallBack.OkHttpCallback() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                // TODO error fetch
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (!response.isSuccessful() || response.body() == null) return;
-                // TODO error fetch
-
-                try {
-                    Drawable icon;
-                    InputStream stream = response.body().byteStream();
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(stream);
-
-                    if (url.contains(".svg")) {
-                        SVG svg = SVG.getFromInputStream(bufferedInputStream);
-                        icon = new PictureDrawable(svg.renderToPicture());
-                    } else {
-                        Bitmap iconBmp = BitmapFactory.decodeStream(bufferedInputStream);
-                        icon = new BitmapDrawable(resources, iconBmp);
-                    }
-
-                    callback.call(icon);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            public void onSuccess(ResponseBody response) {
+                Drawable icon = getIconFromStream(response.byteStream(), url);
+                icons.put(uuid, icon);
+                data.postValue(icons);
             }
         });
     }
 
-    public interface CallBackIcon {
-        void call(Drawable icon);
+    private Drawable getIconFromStream(InputStream stream, String url) {
+        Drawable icon = null;
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(stream);
+
+        if (url.contains(".svg")) {
+            try {
+                SVG svg = SVG.getFromInputStream(bufferedInputStream);
+                icon = new PictureDrawable(svg.renderToPicture());
+            } catch (Exception ignored) {
+            }
+        } else {
+            Bitmap iconBmp = BitmapFactory.decodeStream(bufferedInputStream);
+            icon = new BitmapDrawable(resources, iconBmp);
+        }
+
+        return icon;
     }
 }

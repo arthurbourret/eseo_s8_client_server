@@ -24,33 +24,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO change binding method ?
         setContentView(R.layout.activity_main);
-
-        // TODO separe en * methodes
 
         // TODO change fetch apikey method
         PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
 
+        // init components
+        this.initRecyclerCoinView();
+        this.initViewModel();
+        this.initSyncBtn();
+    }
+
+
+
+    private void initRecyclerCoinView() {
         adapter = new CoinRecyclerAdapter(this);
         RecyclerView recyclerView = findViewById(R.id.listCoins);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+    }
 
+    private void initViewModel() {
         viewModel = new ViewModelProvider(this).get(CoinsViewModel.class);
         viewModel.fetchData();
+    }
 
+    private void initSyncBtn() {
         findViewById(R.id.sync).setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
             viewModel.fetchData();
         });
     }
 
+
+
     @SuppressLint("NotifyDataSetChanged")
     private void updateCoins(CoinsData coinsData) {
         adapter.setCoins(coinsData);
         adapter.notifyDataSetChanged();
     }
+
+
 
     @Override
     protected void onResume() {

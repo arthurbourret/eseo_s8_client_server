@@ -12,7 +12,7 @@ public class BasicResponse {
         return data.getCoin();
     }
 
-    class Data {
+    static class Data {
         private Coin coin;
 
         public Coin getCoin() {
