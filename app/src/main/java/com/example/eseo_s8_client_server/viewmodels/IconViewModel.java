@@ -11,7 +11,7 @@ import android.graphics.drawable.PictureDrawable;
 import androidx.annotation.NonNull;
 
 import com.caverock.androidsvg.SVG;
-import com.example.eseo_s8_client_server.views.MainActivity;
+import com.example.eseo_s8_client_server.CoinApplication;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -23,17 +23,19 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class IconLoader {
+public class IconViewModel {
+    // TODO adapt to IViewModel
+
     private final Resources resources;
     @SuppressLint("StaticFieldLeak")
-    private static final IconLoader SINGLETON = new IconLoader();
+    private static final IconViewModel SINGLETON = new IconViewModel();
     private final OkHttpClient client = new OkHttpClient();
 
-    private IconLoader() {
-        resources = MainActivity.getContext().getResources();
+    private IconViewModel() {
+        resources = CoinApplication.getContext().getResources();
     }
 
-    public static IconLoader getInstance() {
+    public static IconViewModel getInstance() {
         return SINGLETON;
     }
 
@@ -46,11 +48,13 @@ public class IconLoader {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
+                // TODO error fetch
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (!response.isSuccessful() || response.body() == null) return;
+                // TODO error fetch
 
                 try {
                     Drawable icon;

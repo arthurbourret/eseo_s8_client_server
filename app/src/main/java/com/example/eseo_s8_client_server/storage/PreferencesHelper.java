@@ -3,6 +3,7 @@ package com.example.eseo_s8_client_server.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.eseo_s8_client_server.CoinApplication;
 import com.example.eseo_s8_client_server.views.MainActivity;
 
 public class PreferencesHelper {
@@ -14,7 +15,7 @@ public class PreferencesHelper {
     private static final String SHARED_PREFERENCES_LAST_COIN_CLICK = "aled";
 
     private PreferencesHelper (){
-        preferences = MainActivity.getContext()
+        preferences = CoinApplication.getContext()
                 .getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 

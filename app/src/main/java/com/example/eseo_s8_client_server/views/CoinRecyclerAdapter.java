@@ -17,7 +17,7 @@ import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
 import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IViewModel;
-import com.example.eseo_s8_client_server.viewmodels.IconLoader;
+import com.example.eseo_s8_client_server.viewmodels.IconViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     private final ChangeClick toggleClickAllowed = () -> clickAllowed = !clickAllowed;
 
     private CoinsData coins;
-    private final IconLoader loader;
+    private final IconViewModel loader;
     private final Map<String, Drawable> icons;
 
     public CoinRecyclerAdapter(ViewModelStoreOwner owner) {
@@ -37,7 +37,7 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         this.viewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
 
         this.icons = new HashMap<>();
-        this.loader = IconLoader.getInstance();
+        this.loader = IconViewModel.getInstance();
     }
 
     public void setCoins(CoinsData coins) {
@@ -64,14 +64,15 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         holder.setImageIcon(null);
         if (icons.containsKey(uuid) && icons.get(uuid) != null) {
             holder.setImageIcon(icons.get(uuid));
+            // TODO setIcon of pop up
         } else loader.loadIcon(coin.getIconUrl(), icon -> {
             icons.put(uuid, icon);
             holder.setImageIcon(icon);
+            // TODO setIcon of pop up
         });
 
         // set on click
-        // TODO fetch icon
-        holder.setOnClickListener(v -> onViewClickHandler(v, uuid, null));
+        holder.setOnClickListener(v -> onViewClickHandler(v, uuid));
     }
 
     @Override
@@ -79,14 +80,14 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         return (coins == null) ? 0 : coins.size();
     }
 
-    private void onViewClickHandler(View v, String uuid, Drawable icon) {
+    private void onViewClickHandler(View v, String uuid) {
         if (!clickAllowed) return;
 
         toggleClickAllowed.changeClickAllowed();
         viewModel.fetchData(uuid);
         viewModel.getData().observe((LifecycleOwner) owner, res -> {
             // display pop up
-            CoinPopUp popup = new CoinPopUp(v, res, icon, toggleClickAllowed); // TODO
+            CoinPopUp popup = new CoinPopUp(v, res, toggleClickAllowed);
             popup.displayPopUp();
         });
     }
