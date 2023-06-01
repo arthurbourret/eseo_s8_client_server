@@ -1,5 +1,6 @@
 package com.example.eseo_s8_client_server.popup;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.eseo_s8_client_server.R;
@@ -10,7 +11,7 @@ public class CoinPopUp extends PopUpFragment {
     private Coin coin;
     private CoinRecyclerAdapter.ChangeClick callBack;
 
-    public CoinPopUp(View view, CoinRecyclerAdapter.ChangeClick callBack, Coin coin) {
+    public CoinPopUp(View view, Coin coin, Drawable icon, CoinRecyclerAdapter.ChangeClick callBack) {
         super(view, R.layout.popup_coin, true);
         this.coin = coin;
         this.callBack = callBack;

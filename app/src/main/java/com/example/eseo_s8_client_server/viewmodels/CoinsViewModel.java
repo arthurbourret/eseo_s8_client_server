@@ -22,17 +22,19 @@ public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
         return data;
     }
 
-    public void generateNextValue(Object... parameters) {
+    public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI.getBitcoinCoins().enqueue(new Callback<ListResponse>() {
             @Override
             public void onResponse(@NonNull Call<ListResponse> call, @NonNull Response<ListResponse> response) {
                 if (response.body() == null) return;
                 handleResponse(response.body());
+                // TODO error fetch
             }
 
             @Override
             public void onFailure(@NonNull Call<ListResponse> call, @NonNull Throwable t) {
                 t.printStackTrace();
+                // TODO error fetch
             }
         });
     }

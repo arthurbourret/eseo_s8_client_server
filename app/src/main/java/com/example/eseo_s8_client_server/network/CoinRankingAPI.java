@@ -11,15 +11,9 @@ import retrofit2.http.Path;
 // https://square.github.io/retrofit/
 public interface CoinRankingAPI {
 
-    @Headers({
-            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE
-    })
     @GET(NetworkConstants.BITCOIN_COINS_PATH)
     Call<ListResponse> getBitcoinCoins();
 
-    @Headers({
-            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE
-    })
     @GET(NetworkConstants.BITCOIN_COIN_PATH)
     Call<BasicResponse> getBitcoin(@Path("uuri") String uuri);
 }

@@ -4,24 +4,20 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.models.Coin;
+import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
 import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IconLoader;
-import com.example.eseo_s8_client_server.R;
-import com.example.eseo_s8_client_server.models.Coin;
-import com.example.eseo_s8_client_server.models.CoinsData;
-import com.example.eseo_s8_client_server.models.Listener;
-import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,16 +26,7 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     private final IViewModel<Coin> viewModel;
     private final ViewModelStoreOwner owner;
     private boolean clickAllowed = true;
-
-    private final Listener listener = coin -> {
-        Toast.makeText(MainActivity.getContext(), "Click on " + coin.getName(),
-                        Toast.LENGTH_SHORT).show();
-
-        // favoriteCoinUuid = coin.getUuid();
-        // PreferencesHelper.getInstance().setLastCoinClick(coin.getUuid());
-    };
-
-    private String favoriteCoinUuid;
+    private final ChangeClick toggleClickAllowed = () -> clickAllowed = !clickAllowed;
 
     private CoinsData coins;
     private final IconLoader loader;
@@ -51,8 +38,6 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
 
         this.icons = new HashMap<>();
         this.loader = IconLoader.getInstance();
-
-        this.favoriteCoinUuid = PreferencesHelper.getInstance().getLastCoinClick();
     }
 
     public void setCoins(CoinsData coins) {
@@ -85,16 +70,8 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         });
 
         // set on click
-        holder.setOnClickListener(v -> {
-            if (!clickAllowed) return;
-
-            viewModel.generateNextValue(uuid);
-            viewModel.getData().observe((LifecycleOwner) owner, res -> {
-                // display pop up
-                CoinPopUp popup = new CoinPopUp(holder.itemView, () -> clickAllowed = true, res);
-                popup.displayPopUp();
-            });
-        });
+        // TODO fetch icon
+        holder.setOnClickListener(v -> onViewClickHandler(v, uuid, null));
     }
 
     @Override
@@ -102,7 +79,19 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         return (coins == null) ? 0 : coins.size();
     }
 
+    private void onViewClickHandler(View v, String uuid, Drawable icon) {
+        if (!clickAllowed) return;
+
+        toggleClickAllowed.changeClickAllowed();
+        viewModel.fetchData(uuid);
+        viewModel.getData().observe((LifecycleOwner) owner, res -> {
+            // display pop up
+            CoinPopUp popup = new CoinPopUp(v, res, icon, toggleClickAllowed); // TODO
+            popup.displayPopUp();
+        });
+    }
+
     public interface ChangeClick {
-        public void changeClickAllowed();
+        void changeClickAllowed();
     }
 }

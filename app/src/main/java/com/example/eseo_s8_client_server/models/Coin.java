@@ -6,6 +6,8 @@ public class Coin {
     private String symbol;
     private String name;
     private String color;
+    private String description;
+    private Integer rank;
     private Float change;
     private Float price;
     private Long marketCap;
@@ -29,6 +31,14 @@ public class Coin {
 
     public String getColor() {
         return color;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Integer getRank() {
+        return rank;
     }
 
     public Float getChange() {

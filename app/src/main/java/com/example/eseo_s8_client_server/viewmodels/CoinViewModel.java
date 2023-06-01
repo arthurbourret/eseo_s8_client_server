@@ -22,7 +22,7 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
     }
 
     @Override
-    public void generateNextValue(Object... parameters) {
+    public void fetchData(Object... parameters) {
         if (parameters == null || parameters.length < 1 || !(parameters[0] instanceof String))
             return;
         String uuid = (String) parameters[0];
@@ -33,11 +33,13 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
                                    @NonNull Response<BasicResponse> response) {
                 if (response.body() == null) return;
                 handleResponse(response.body());
+                // TODO error fetch
             }
 
             @Override
             public void onFailure(@NonNull Call<BasicResponse> call, @NonNull Throwable t) {
                 t.printStackTrace();
+                // TODO error fetch
             }
         });
     }

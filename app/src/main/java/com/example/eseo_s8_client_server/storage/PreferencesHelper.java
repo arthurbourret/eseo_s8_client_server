@@ -40,4 +40,17 @@ public class PreferencesHelper {
     public void setApiKey(String apiKey){
         this.preferences.edit().putString(API_KEY, apiKey).apply();
     }
+
+    public Object getFavorites() {
+        // TODO
+        return null;
+    }
+
+    public void addCoinToFavorite(String uuid) {
+        // TODO
+    }
+
+    public void removeCoinFromFavorite(String uuid) {
+        // TODO
+    }
 }
