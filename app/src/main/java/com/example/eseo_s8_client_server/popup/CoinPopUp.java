@@ -37,8 +37,8 @@ public class CoinPopUp extends PopUpFragment {
         ((TextView) view.findViewById(R.id.symbol_coin)).setText(coin.getSymbol());
         ((TextView) view.findViewById(R.id.price_coin)).setText(coin.getPrice() + "");
         ((TextView) view.findViewById(R.id.change_coin)).setText(coin.getChange() + "");
-        ((TextView) view.findViewById(R.id.market_cap)).setText(Math.toIntExact(coin.getMarketCap()));
-        ((TextView) view.findViewById(R.id.volume_24h)).setText(Math.toIntExact(coin.getVolume24H()));
+        ((TextView) view.findViewById(R.id.market_cap)).setText(coin.getMarketCap());
+        ((TextView) view.findViewById(R.id.volume_24h)).setText(coin.getVolume24H());
 
         // set color
         try {
