@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">eseo_s8_client_server</string>
+    <string name="snc_btn">sync button</string>
 </resources>

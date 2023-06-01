@@ -1,6 +1,7 @@
 package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,10 +15,10 @@ import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
-import com.example.eseo_s8_client_server.viewmodels.IViewModel;
+import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
-    private IViewModel<CoinsData> viewModel;
+    private CoinsViewModel viewModel;
     private CoinRecyclerAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
@@ -31,12 +32,26 @@ public class MainActivity extends AppCompatActivity {
         PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
 
         // init components
+        this.initTabs();
         this.initRecyclerCoinView();
         this.initViewModel();
         this.initSyncBtn();
     }
 
 
+    private void initTabs() {
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.setSelectedTabIndicatorColor(Color.WHITE);
+
+        // set tab all coins
+        TabLayout.Tab all = tabs.newTab().setText("All");
+        all.view.setOnClickListener(v -> viewModel.fetchAll());
+        tabs.addTab(all, 0);
+        // set tab favorites coins
+        TabLayout.Tab favorites = tabs.newTab().setText("Favorites");
+        favorites.view.setOnClickListener(v -> viewModel.fetchFavorites());
+        tabs.addTab(favorites, 1);
+    }
 
     private void initRecyclerCoinView() {
         adapter = new CoinRecyclerAdapter(this);

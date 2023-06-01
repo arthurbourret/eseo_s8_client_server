@@ -11,6 +11,7 @@ import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 
 public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
     private final MutableLiveData<CoinsData> data = new MutableLiveData<>();
+    private CoinsData coins;
 
     public LiveData<CoinsData> getData() {
         return data;
@@ -29,6 +30,17 @@ public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
 
     private void handleResponse(ListResponse response) {
         CoinsData coinsData = new CoinsData(response.getData());
-        data.postValue(coinsData);
+        this.coins = coinsData;
+        this.data.postValue(coinsData);
+    }
+
+    public void fetchFavorites() {
+        CoinsData coinsData = new CoinsData(coins.getFavorites());
+        this.data.postValue(coinsData);
+    }
+
+    public void fetchAll() {
+        CoinsData coinsData = new CoinsData(coins.getCoins());
+        this.data.postValue(coinsData);
     }
 }
