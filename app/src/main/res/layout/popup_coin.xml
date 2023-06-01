@@ -139,7 +139,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/popupMenuBackground" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageView
         android:id="@+id/favorite"
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -147,6 +147,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
