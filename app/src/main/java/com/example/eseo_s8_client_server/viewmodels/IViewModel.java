@@ -4,5 +4,6 @@ import androidx.lifecycle.LiveData;
 
 public interface IViewModel<T> {
     LiveData<T> getData();
-    void generateNextValue();
+
+    void generateNextValue(Object... parameters);
 }

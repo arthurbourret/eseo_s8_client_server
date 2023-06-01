@@ -3,7 +3,7 @@ package com.example.eseo_s8_client_server.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.eseo_s8_client_server.MainActivity;
+import com.example.eseo_s8_client_server.views.MainActivity;
 
 public class PreferencesHelper {
     private static PreferencesHelper INSTANCE;

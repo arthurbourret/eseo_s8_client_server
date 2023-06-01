@@ -1,7 +1,7 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +11,7 @@ import android.graphics.drawable.PictureDrawable;
 import androidx.annotation.NonNull;
 
 import com.caverock.androidsvg.SVG;
+import com.example.eseo_s8_client_server.views.MainActivity;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -23,19 +24,17 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class IconLoader {
+    private final Resources resources;
     @SuppressLint("StaticFieldLeak")
     private static final IconLoader SINGLETON = new IconLoader();
-    private static final OkHttpClient client = new OkHttpClient();
-    private Context context;
+    private final OkHttpClient client = new OkHttpClient();
 
-    private IconLoader() {}
+    private IconLoader() {
+        resources = MainActivity.getContext().getResources();
+    }
 
     public static IconLoader getInstance() {
         return SINGLETON;
-    }
-
-    public void setContext(Context context) {
-        SINGLETON.context = context;
     }
 
     public void loadIcon(String url, CallBackIcon callback) {
@@ -63,7 +62,7 @@ public class IconLoader {
                         icon = new PictureDrawable(svg.renderToPicture());
                     } else {
                         Bitmap iconBmp = BitmapFactory.decodeStream(bufferedInputStream);
-                        icon = new BitmapDrawable(context.getResources(), iconBmp);
+                        icon = new BitmapDrawable(resources, iconBmp);
                     }
 
                     callback.call(icon);
@@ -74,7 +73,7 @@ public class IconLoader {
         });
     }
 
-    interface CallBackIcon {
+    public interface CallBackIcon {
         void call(Drawable icon);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.eseo_s8_client_server;
+package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,15 +6,17 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
-import com.example.eseo_s8_client_server.storage.PreferencesHelper;
-import com.example.eseo_s8_client_server.viewmodels.CoinRecyclerAdapter;
+import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
+import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IViewModel;
-import com.example.eseo_s8_client_server.viewmodels.RetrofitViewModel;
 
 public class MainActivity extends AppCompatActivity {
     private IViewModel<CoinsData> viewModel;
@@ -34,19 +36,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this).get(RetrofitViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CoinsViewModel.class);
         viewModel.generateNextValue();
 
         findViewById(R.id.sync).setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
             viewModel.generateNextValue();
         });
-
-        String lastCoin = PreferencesHelper.getInstance().getLastCoinClick();
-        if (lastCoin != null) {
-            Toast.makeText(MainActivity.this, "Last coin: " + lastCoin,
-                            Toast.LENGTH_LONG).show();
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

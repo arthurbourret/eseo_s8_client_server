@@ -8,20 +8,21 @@ import androidx.lifecycle.ViewModel;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.models.ListResponse;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
+import com.example.eseo_s8_client_server.viewmodels.IViewModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RetrofitViewModel extends ViewModel implements IViewModel<CoinsData> {
+public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
     private final MutableLiveData<CoinsData> data = new MutableLiveData<>();
 
     public LiveData<CoinsData> getData() {
         return data;
     }
 
-    public void generateNextValue() {
+    public void generateNextValue(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI.getBitcoinCoins().enqueue(new Callback<ListResponse>() {
             @Override
             public void onResponse(@NonNull Call<ListResponse> call, @NonNull Response<ListResponse> response) {

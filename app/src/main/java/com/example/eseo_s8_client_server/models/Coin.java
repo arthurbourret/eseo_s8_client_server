@@ -8,8 +8,8 @@ public class Coin {
     private String color;
     private Float change;
     private Float price;
-    private int marketCap;
-    private int volume24H;
+    private Long marketCap;
+    private Long volume24H;
     private boolean favorite;
 
     public String getIconUrl() {
@@ -39,11 +39,11 @@ public class Coin {
         return price;
     }
 
-    public int getMarketCap() {
+    public Long getMarketCap() {
         return marketCap;
     }
 
-    public int getVolume24H() {
+    public Long getVolume24H() {
         return volume24H;
     }
 
