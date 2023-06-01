@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,16 +13,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
+import com.example.eseo_s8_client_server.models.Listener;
+import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
+    private Context context;
     private CoinsData coins;
     private final IconLoader loader;
     private final Map<String, Drawable> icons;
+    private Listener listener = coin -> {
+        Toast.makeText(context, "Click on " + coin.getName(), Toast.LENGTH_SHORT)
+                .show();
+
+        PreferencesHelper.getInstance().setLastCoinClick(coin.getName());
+    };
 
     public CoinRecyclerAdapter(Context context) {
+        this.context = context;
         this.icons = new HashMap<>();
         loader = IconLoader.getInstance();
         loader.setContext(context);
@@ -54,7 +65,7 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
             holder.setImageIcon(icon);
         });
 
-        holder.setOnClickListener(v -> holder.onClick(coin));
+        holder.setOnClickListener(v -> listener.onClick(coin));
     }
 
     @Override

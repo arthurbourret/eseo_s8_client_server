@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.models.CoinsData;
+import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinRecyclerAdapter;
 import com.example.eseo_s8_client_server.viewmodels.IViewModel;
 import com.example.eseo_s8_client_server.viewmodels.RetrofitViewModel;
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
             viewModel.generateNextValue();
         });
+
+        String lastCoin = PreferencesHelper.getInstance().getLastCoinClick();
+        if (lastCoin != null) {
+            Toast.makeText(MainActivity.this, "Last coin: " + lastCoin,
+                            Toast.LENGTH_LONG).show();
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

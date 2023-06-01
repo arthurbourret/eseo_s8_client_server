@@ -15,7 +15,7 @@ import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.Listener;
 
-public class CoinView extends RecyclerView.ViewHolder implements Listener {
+public class CoinView extends RecyclerView.ViewHolder {
     private ImageView imageView;
 
     public CoinView(@NonNull View itemView) {
@@ -39,12 +39,6 @@ public class CoinView extends RecyclerView.ViewHolder implements Listener {
 
     public void setImageIcon(Drawable icon) {
         imageView.setImageDrawable(icon);
-    }
-
-    @Override
-    public void onClick(Coin coin) {
-        Toast.makeText(itemView.getContext(), "Click on " + coin.getName(), Toast.LENGTH_SHORT).show();
-        // TODO onClick(Coin coin)
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
