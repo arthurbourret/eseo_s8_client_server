@@ -12,15 +12,13 @@ import retrofit2.http.Path;
 public interface CoinRankingAPI {
 
     @Headers({
-            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE,
-            NetworkConstants.KEY_HEADER_NAME + ": " + NetworkConstants.KEY_HEADER_VALUE
+            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE
     })
     @GET(NetworkConstants.BITCOIN_COINS_PATH)
     Call<ListResponse> getBitcoinCoins();
 
     @Headers({
-            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE,
-            NetworkConstants.KEY_HEADER_NAME + ": " + NetworkConstants.KEY_HEADER_VALUE
+            NetworkConstants.HOST_HEADER_NAME + ": " + NetworkConstants.HOST_HEADER_VALUE
     })
     @GET(NetworkConstants.BITCOIN_COIN_PATH)
     Call<BasicResponse> getBitcoin(@Path("uuri") String uuri);
