@@ -8,6 +8,9 @@ public class Coin {
     private String color;
     private Float change;
     private Float price;
+    private int marketCap;
+    private int volume24H;
+    private boolean favorite;
 
     public String getIconUrl() {
         return iconUrl;
@@ -34,5 +37,21 @@ public class Coin {
 
     public Float getPrice() {
         return price;
+    }
+
+    public int getMarketCap() {
+        return marketCap;
+    }
+
+    public int getVolume24H() {
+        return volume24H;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+    
+    public void setFavorite(boolean favorite){
+        this.favorite = favorite;
     }
 }
