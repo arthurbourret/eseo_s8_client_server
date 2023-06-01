@@ -53,6 +53,8 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
             icons.put(uuid, icon);
             holder.setImageIcon(icon);
         });
+
+        holder.setOnClickListener(v -> holder.onClick(coin));
     }
 
     @Override

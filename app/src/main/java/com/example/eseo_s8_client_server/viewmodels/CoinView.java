@@ -6,14 +6,16 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.models.Coin;
+import com.example.eseo_s8_client_server.models.Listener;
 
-public class CoinView extends RecyclerView.ViewHolder {
+public class CoinView extends RecyclerView.ViewHolder implements Listener {
     private ImageView imageView;
 
     public CoinView(@NonNull View itemView) {
@@ -37,5 +39,15 @@ public class CoinView extends RecyclerView.ViewHolder {
 
     public void setImageIcon(Drawable icon) {
         imageView.setImageDrawable(icon);
+    }
+
+    @Override
+    public void onClick(Coin coin) {
+        Toast.makeText(itemView.getContext(), "Click on " + coin.getName(), Toast.LENGTH_SHORT).show();
+        // TODO onClick(Coin coin)
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        itemView.setOnClickListener(listener);
     }
 }
