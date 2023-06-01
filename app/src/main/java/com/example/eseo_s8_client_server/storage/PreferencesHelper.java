@@ -10,7 +10,7 @@ public class PreferencesHelper {
 
     private final SharedPreferences preferences;
     private static final String SHARED_PREFERENCES_NAME = "loutre";
-
+    private static final String API_KEY = "apiKey";
     private static final String SHARED_PREFERENCES_LAST_COIN_CLICK = "aled";
 
     private PreferencesHelper (){
@@ -31,5 +31,13 @@ public class PreferencesHelper {
 
     public void setLastCoinClick(String lastCoinName){
         preferences.edit().putString(SHARED_PREFERENCES_LAST_COIN_CLICK, lastCoinName).apply();
+    }
+
+    public String getApiKey() {
+        return preferences.getString(API_KEY, null);
+    }
+
+    public void setApiKey(String apiKey){
+        this.preferences.edit().putString(API_KEY, apiKey).apply();
     }
 }
