@@ -3,10 +3,7 @@ package com.example.eseo_s8_client_server.views;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.text.Layout;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +13,7 @@ import com.example.eseo_s8_client_server.databinding.LayoutListCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 
 public class CoinView extends RecyclerView.ViewHolder {
-    private LayoutListCoinBinding binding;
-
+    private final LayoutListCoinBinding binding;
 
     public CoinView(@NonNull LayoutListCoinBinding binding) {
         super(binding.getRoot());

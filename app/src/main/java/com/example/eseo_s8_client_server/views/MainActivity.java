@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.databinding.ActivityMainBinding;
-import com.example.eseo_s8_client_server.models.CoinsData;
+import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -44,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
         // set tab all coins
         TabLayout.Tab all = tabs.newTab().setText("All");
-        all.view.setOnClickListener(v -> viewModel.fetchAll());
+        // all.view.setOnClickListener(v -> viewModel.fetchAll()); // TODO remettre a l'adpater ?
         tabs.addTab(all, 0);
         // set tab favorites coins
         TabLayout.Tab favorites = tabs.newTab().setText("Favorites");
-        favorites.view.setOnClickListener(v -> viewModel.fetchFavorites());
+        // favorites.view.setOnClickListener(v -> viewModel.fetchFavorites()); // TODO remettre a l'adpater ?
         tabs.addTab(favorites, 1);
     }
 
@@ -75,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateCoins(CoinsData coinsData) {
-        adapter.setCoins(coinsData);
+    private void updateCoins(List<Coin> coins) {
+        adapter.setCoins(coins);
         adapter.notifyDataSetChanged();
     }
 

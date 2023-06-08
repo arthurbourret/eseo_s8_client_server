@@ -1,30 +1,45 @@
 package com.example.eseo_s8_client_server.popup;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
+import com.example.eseo_s8_client_server.CoinApplication;
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.PopupCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 
-public class CoinPopUp extends PopUpFragment {
-    private PopupCoinBinding binding;
-    // TODO: est-ce qu'on peut éviter de garder le coin ici ? en le passant dans le init ?
-    private final Coin coin;
+public class CoinPopUp implements PopUp {
+    private final PopupCoinBinding binding;
+    private View view;
+    protected PopupWindow popupWindow;
 
-    public CoinPopUp(View view, Coin coin) {
-        super(view, R.layout.popup_coin, true);
-        this.coin = coin;
+    public CoinPopUp(View parent) {
+        LayoutInflater inflater = (LayoutInflater) CoinApplication.getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.binding = PopupCoinBinding.inflate(inflater, (ViewGroup) parent, false);
+        this.setupPopup();
+    }
+
+    private void setupPopup() {
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        this.popupWindow = new PopupWindow(view, width, height, true);
+        this.popupWindow.setOnDismissListener(this::onClose);
+        this.popupWindow.setOutsideTouchable(false);
+        this.view = binding.getRoot();
     }
 
     @SuppressLint("SetTextI18n")
-    @Override
-    public void initPopUp() {
+    public void initPopUp(Coin coin) {
         // set favorite
         if (coin.isFavorite()) {
             binding.favorite.setImageResource(R.drawable.star_gold);
@@ -62,4 +77,12 @@ public class CoinPopUp extends PopUpFragment {
     public void setIcon(Drawable icon) {
         binding.iconCoin.setImageDrawable(icon);
     }
+
+    @Override
+    public final void displayPopUp() {
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    @Override
+    public void onClose() {}
 }

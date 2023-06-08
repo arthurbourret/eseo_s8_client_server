@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.LayoutListCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
@@ -18,22 +17,25 @@ import com.example.eseo_s8_client_server.popup.CoinPopUp;
 import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IconViewModel;
 
+import java.util.List;
+
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     // TODO: une fois la récupération des images simplifiée, ne pas utilisé de VM ici. Les données sont transmises par l'activity
     private final ViewModelStoreOwner owner;
     private final CoinViewModel coinViewModel;
     private final IconViewModel iconViewModel;
 
-    private CoinsData coins;
+    private final CoinsData coins;
 
     public CoinRecyclerAdapter(ViewModelStoreOwner owner) {
         this.owner = owner;
+        this.coins = new CoinsData();
         this.coinViewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
         this.iconViewModel = new ViewModelProvider(owner).get(IconViewModel.class);
     }
 
-    public void setCoins(CoinsData coins) {
-        if (coins != null) this.coins = coins;
+    public void setCoins(List<Coin> coins) {
+        if (coins != null) this.coins.setCoinList(coins);
     }
 
     @NonNull
@@ -67,8 +69,9 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         coinViewModel.fetchData(uuid);
         coinViewModel.getData().observe((LifecycleOwner) owner, res -> {
             // display pop up
-            CoinPopUp popup = new CoinPopUp(v, res);
+            CoinPopUp popup = new CoinPopUp(v);
             popup.setIcon(iconViewModel.getIcon(res.getUuid()));
+            popup.initPopUp(res);
             popup.displayPopUp();
         });
     }

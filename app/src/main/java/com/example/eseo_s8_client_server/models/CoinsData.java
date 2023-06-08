@@ -10,19 +10,17 @@ public class CoinsData {
 
     public CoinsData() {}
 
-    public CoinsData(Coin[] list) {
-        if (list != null) setCoinList(list);
-    }
-
-    public CoinsData(List<Coin> list) {
-        if (list != null) setCoinList(list);
-    }
-
     public void setCoinList(Coin[] list) {
+        if (list == null) return;
+
+        this.coinList.clear();
         this.coinList.addAll(Arrays.asList(list));
     }
 
     public void setCoinList(List<Coin> list) {
+        if (list == null) return;
+
+        this.coinList.clear();
         this.coinList.addAll(list);
     }
 
