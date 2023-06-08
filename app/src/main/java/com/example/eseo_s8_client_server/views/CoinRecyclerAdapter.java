@@ -25,9 +25,6 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
 
     private CoinsData coins;
 
-    private boolean clickAllowed = true;
-    private final ChangeClick toggleClickAllowed = () -> clickAllowed = !clickAllowed;
-
     public CoinRecyclerAdapter(ViewModelStoreOwner owner) {
         this.owner = owner;
         this.coinViewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
@@ -66,13 +63,11 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     }
 
     private void onViewClickHandler(View v, String uuid) {
-        if (!clickAllowed) return;
-
-        toggleClickAllowed.changeClickAllowed();
         coinViewModel.fetchData(uuid);
         coinViewModel.getData().observe((LifecycleOwner) owner, res -> {
             // display pop up
-            CoinPopUp popup = new CoinPopUp(v, res, toggleClickAllowed);
+            CoinPopUp popup = new CoinPopUp(v, res);
+            popup.setIcon(iconViewModel.getIcon(res.getUuid()));
             popup.displayPopUp();
         });
     }
@@ -80,9 +75,5 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     @Override
     public int getItemCount() {
         return (coins == null) ? 0 : coins.size();
-    }
-
-    public interface ChangeClick {
-        void changeClickAllowed();
     }
 }

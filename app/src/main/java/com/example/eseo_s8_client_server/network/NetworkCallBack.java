@@ -15,8 +15,12 @@ public abstract class NetworkCallBack {
     }
 
     private static void displayError() {
-        Toast.makeText(CoinApplication.getContext(), "Data could not be loaded",
-                Toast.LENGTH_LONG).show();
+        try {
+            Toast.makeText(CoinApplication.getContext(), "Data could not be loaded",
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception ignored) {
+            // Can make the app crash if context uncertain
+        }
     }
 
     public abstract static class RetrofitCallback<T> implements retrofit2.Callback<T> {

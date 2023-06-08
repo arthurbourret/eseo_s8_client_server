@@ -11,7 +11,7 @@ import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 
 public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
     private final MutableLiveData<CoinsData> data = new MutableLiveData<>();
-    private CoinsData coins;
+    private CoinsData coins = new CoinsData();
 
     public LiveData<CoinsData> getData() {
         return data;

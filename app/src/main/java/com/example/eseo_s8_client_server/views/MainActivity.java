@@ -1,7 +1,6 @@
 package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     // TODO: tabs ? je vous conseille de commencer simple (2e activity) et de faire plus complexe si vous avez le temps
     private void initTabs() {
         TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setSelectedTabIndicatorColor(Color.WHITE);
 
         // set tab all coins
         TabLayout.Tab all = tabs.newTab().setText("All");
