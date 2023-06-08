@@ -41,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         this.initRecyclerCoinView();
         this.initViewModel();
         this.initSyncBtn();
+        this.initOrderButt();
+    }
+
+    private void initOrderButt() {
+        binding.order.setOnClickListener(v -> {
+            viewModel.orderByName();
+        });
     }
 
     private void initTabs() {
