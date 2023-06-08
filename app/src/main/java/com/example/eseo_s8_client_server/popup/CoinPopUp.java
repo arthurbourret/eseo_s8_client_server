@@ -8,9 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.databinding.PopupCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 
 public class CoinPopUp extends PopUpFragment {
+    private PopupCoinBinding binding;
     // TODO: est-ce qu'on peut éviter de garder le coin ici ? en le passant dans le init ?
     private final Coin coin;
 

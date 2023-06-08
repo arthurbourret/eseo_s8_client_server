@@ -1,6 +1,6 @@
 package com.example.eseo_s8_client_server.models;
 
-public class BasicResponse {
+public class CoinResponse {
     private String status;
     private Data data;
 

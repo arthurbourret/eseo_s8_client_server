@@ -9,14 +9,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.databinding.ActivityMainBinding;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.google.android.material.tabs.TabLayout;
-// TODO: attention, peu de temps à la fin du module pour terminer le projet. L'écran de détails devrait être terminé.
+
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
     private CoinsViewModel viewModel;
     private CoinRecyclerAdapter adapter;
 
@@ -24,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO change binding method ?
-        // TODO: oui,n utiliser le view bindingr
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         // TODO change fetch apikey method
         // TODO: essayer de ne pas utiliser les preferences dans l'activity
@@ -39,9 +38,8 @@ public class MainActivity extends AppCompatActivity {
         this.initSyncBtn();
     }
 
-    // TODO: tabs ? je vous conseille de commencer simple (2e activity) et de faire plus complexe si vous avez le temps
     private void initTabs() {
-        TabLayout tabs = findViewById(R.id.tabs);
+        TabLayout tabs = binding.tabs;
 
         // set tab all coins
         TabLayout.Tab all = tabs.newTab().setText("All");
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerCoinView() {
         adapter = new CoinRecyclerAdapter(this);
-        RecyclerView recyclerView = findViewById(R.id.listCoins);
+        RecyclerView recyclerView = binding.listCoins;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSyncBtn() {
-        findViewById(R.id.sync).setOnClickListener(v -> {
+        binding.sync.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
             viewModel.fetchData();
         });

@@ -1,6 +1,6 @@
 package com.example.eseo_s8_client_server.models;
 // TODO: décomposer, un fichier pour chaque classe, List plutôt que []
-public class ListResponse {
+public class CoinsResponse {
     private String status;
     private Data data;
 

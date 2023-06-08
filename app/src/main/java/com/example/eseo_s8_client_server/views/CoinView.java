@@ -11,9 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.databinding.LayoutListCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 
 public class CoinView extends RecyclerView.ViewHolder {
+    private LayoutListCoinBinding binding;
     private ImageView imageView;
 
     public CoinView(@NonNull View itemView) {
@@ -22,7 +24,7 @@ public class CoinView extends RecyclerView.ViewHolder {
 
     @SuppressLint("SetTextI18n")
     public void initCoin(Coin coin) {
-// TODO: view binding
+        // TODO: view binding
         imageView = itemView.findViewById(R.id.icon_coin);
         ((TextView) itemView.findViewById(R.id.name_coin)).setText(coin.getName());
         ((TextView) itemView.findViewById(R.id.symbol_coin)).setText(coin.getSymbol());
