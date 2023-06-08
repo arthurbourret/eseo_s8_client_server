@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 public class CoinsData {
     private final List<Coin> coinList = new ArrayList<>();
 
-    public CoinsData() {}
+    public CoinsData() {
+    }
 
     public void setCoinList(Coin[] list) {
         if (list == null) return;

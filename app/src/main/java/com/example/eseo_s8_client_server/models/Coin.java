@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity(tableName = "coin_table")
 public class Coin {
 
@@ -39,6 +41,7 @@ public class Coin {
     @ColumnInfo(name= "market_cap")
     private final String marketCap;
 
+    @SerializedName("24hVolume")
     @ColumnInfo(name= "volume_24h")
     private final String volume24H;
 

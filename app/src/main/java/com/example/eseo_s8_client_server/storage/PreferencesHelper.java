@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.example.eseo_s8_client_server.CoinApplication;
 import com.example.eseo_s8_client_server.models.Coin;
-import com.example.eseo_s8_client_server.views.CoinView;
 
 import org.json.JSONArray;
 
@@ -29,6 +28,8 @@ public class PreferencesHelper {
     private PreferencesHelper() {
         preferences = CoinApplication.getContext()
                 .getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+        initFavoriteCoinsIds();
     }
 
     public static PreferencesHelper getInstance() {
@@ -46,9 +47,8 @@ public class PreferencesHelper {
         this.preferences.edit().putString(API_KEY, apiKey).apply();
     }
 
-    private List<String> getFavoriteCoins() {
-        if (this.favoriteCoins != null) return favoriteCoins;
-        List<String> favList = new LinkedList<>();
+    private void initFavoriteCoinsIds() {
+        favoriteCoins = new LinkedList<>();
 
         try {
             String scoresTxt = preferences.getString(SHARED_PREFERENCES_FAVORITE_COINS, "[]");
@@ -56,15 +56,16 @@ public class PreferencesHelper {
 
             for (int i = 0; i < favArr.length(); i++) {
                 String uuid = favArr.getString(i);
-                favList.add(uuid);
+                favoriteCoins.add(uuid);
             }
 
-            Collections.sort(favList);
+            Collections.sort(favoriteCoins);
         } catch (Exception ignored) {
         }
+    }
 
-        this.favoriteCoins = favList;
-        return favList;
+    public List<String> getFavoriteCoinsIds() {
+        return favoriteCoins;
     }
 
     public void addCoinToFavorite(Coin coin) {

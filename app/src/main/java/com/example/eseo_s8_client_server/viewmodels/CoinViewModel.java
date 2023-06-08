@@ -16,6 +16,7 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
     public LiveData<Coin> getData() {
         return data;
     }
+
     // TODO: pourquoi ne pas avoir un paramètre de type String ?
     @Override
     public void fetchData(Object... parameters) {

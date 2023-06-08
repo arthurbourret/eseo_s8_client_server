@@ -3,68 +3,74 @@ package com.example.eseo_s8_client_server.popup;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import com.example.eseo_s8_client_server.CoinApplication;
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.PopupCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
+import com.squareup.picasso.Picasso;
 
 public class CoinPopUp implements PopUp {
     private final PopupCoinBinding binding;
-    private View view;
     protected PopupWindow popupWindow;
 
-    public CoinPopUp(View parent) {
-        LayoutInflater inflater = (LayoutInflater) CoinApplication.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.binding = PopupCoinBinding.inflate(inflater, (ViewGroup) parent, false);
-        this.setupPopup();
+    public CoinPopUp(Context context) {
+        this.binding = PopupCoinBinding.inflate(LayoutInflater.from(context));
+        this.setupDisplayer();
     }
 
-    private void setupPopup() {
+    private void setupDisplayer() {
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        this.popupWindow = new PopupWindow(view, width, height, true);
+
+        this.popupWindow = new PopupWindow(binding.getRoot(), width, height, true);
         this.popupWindow.setOnDismissListener(this::onClose);
         this.popupWindow.setOutsideTouchable(false);
-        this.view = binding.getRoot();
     }
 
     @SuppressLint("SetTextI18n")
-    public void initPopUp(Coin coin) {
-        // set favorite
+    public void initContent(Coin coin) {
+        // show favorite status
         if (coin.isFavorite()) {
-            binding.favorite.setImageResource(R.drawable.star_gold);
+            setFavorite();
         } else {
-            binding.favorite.setImageResource(R.drawable.star_empty);
+            unsetFavorite();
         }
 
         binding.favorite.setOnClickListener(v -> {
-            if (coin.isFavorite()){
+            if (coin.isFavorite()) {
+                unsetFavorite();
 
                 PreferencesHelper.getInstance().removeCoinFromFavorite(coin);
-            }else {
+                // TODO changer de place + notify recycler du changement
+            } else {
+                setFavorite();
 
                 PreferencesHelper.getInstance().addCoinToFavorite(coin);
+                // TODO changer de place + notify recycler du changement
             }
         });
 
+        // set close btn
+        binding.closePopUp.setOnClickListener(v -> popupWindow.dismiss());
+
         // set texts
         binding.nameCoin.setText(coin.getName());
-        binding.symbolCoin.setText(coin.getSymbol());
+        binding.symbolCoin.setText("(" + coin.getSymbol() + ")");
         binding.priceCoin.setText(coin.getPrice() + "");
+        binding.rankCoin.setText(coin.getRank() + "");
         binding.changeCoin.setText(coin.getChange() + "");
         binding.marketCap.setText(coin.getMarketCap());
         binding.volume24h.setText(coin.getVolume24H());
         binding.description.setText(coin.getDescription());
+
+        // set icon
+        Picasso.get().load(coin.getIconUrl().replace(".svg", ".png"))
+                .into(binding.iconCoin);
 
         // set color
         try {
@@ -74,15 +80,20 @@ public class CoinPopUp implements PopUp {
         }
     }
 
-    public void setIcon(Drawable icon) {
-        binding.iconCoin.setImageDrawable(icon);
+    private void setFavorite() {
+        binding.favorite.setImageResource(R.drawable.star_gold);
+    }
+
+    private void unsetFavorite() {
+        binding.favorite.setImageResource(R.drawable.star_empty);
     }
 
     @Override
     public final void displayPopUp() {
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(binding.getRoot(), Gravity.CENTER, 0, 0);
     }
 
     @Override
-    public void onClose() {}
+    public void onClose() {
+    }
 }

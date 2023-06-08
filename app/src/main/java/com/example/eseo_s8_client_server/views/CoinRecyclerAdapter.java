@@ -1,49 +1,32 @@
 package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.databinding.LayoutListCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
-import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
+import com.example.eseo_s8_client_server.models.Listener;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
-    // TODO: une fois la récupération des images simplifiée, ne pas utilisé de VM ici. Les données sont transmises par l'activity
-    private final CoinViewModel coinViewModel;
-
-
     private final CoinsData coins;
-    private final Map<String, Bitmap> icons;
+    private final Listener listener;
 
-    public CoinRecyclerAdapter(ViewModelStoreOwner owner) {
+    public CoinRecyclerAdapter(Listener listener) {
         this.coins = new CoinsData();
-        this.coinViewModel = new ViewModelProvider(owner).get(CoinViewModel.class);
-        this.icons = new HashMap<>();
+        this.listener = listener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setCoins(List<Coin> coins) {
         if (coins == null) return;
         this.coins.setCoinList(coins);
-        this.notifyDataSetChanged();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setIcons(Map<String, Bitmap> icons) {
-        this.icons.putAll(icons);
         this.notifyDataSetChanged();
     }
 
@@ -58,29 +41,15 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     @Override
     public void onBindViewHolder(@NonNull CoinView holder, int position) {
         Coin coin = coins.getCoin(position);
-        String uuid = coin.getUuid();
 
         // set holder
         holder.initCoin(coin);
-        //set holder icon
-        holder.setImageIcon(icons.get(uuid));
         // set on click
-        holder.setOnClickListener(v -> onViewClickHandler(v, uuid));
-    }
-
-    private void onViewClickHandler(View v, String uuid) {
-        coinViewModel.fetchData(uuid);
-        // TODO : arthur il y a du rouge
-        //coinViewModel.getData().observe((LifecycleOwner) owner, res -> {
-        // display pop up
-        //    CoinPopUp popup = new CoinPopUp(v);
-        //    popup.initPopUp(res);
-        //    popup.displayPopUp();
-        //});
+        holder.setOnClickListener(v -> listener.onClick(coin));
     }
 
     @Override
     public int getItemCount() {
-        return (coins == null) ? 0 : coins.size();
+        return coins.size();
     }
 }
