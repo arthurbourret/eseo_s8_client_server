@@ -13,8 +13,6 @@ public class PreferencesHelper {
     private static final String SHARED_PREFERENCES_NAME = "loutre";
     // TODO: plus besoin
     private static final String API_KEY = "apiKey";
-    // TODO: nom explicite
-    private static final String SHARED_PREFERENCES_LAST_COIN_CLICK = "aled";
 
     private PreferencesHelper (){
         preferences = CoinApplication.getContext()
@@ -26,14 +24,6 @@ public class PreferencesHelper {
             INSTANCE = new PreferencesHelper();
         }
         return INSTANCE;
-    }
-    // TODO: inutilisé
-    public String getLastCoinClick(){
-        return preferences.getString(SHARED_PREFERENCES_LAST_COIN_CLICK, null);
-    }
-    // TODO: inutilisé
-    public void setLastCoinClick(String lastCoinName){
-        preferences.edit().putString(SHARED_PREFERENCES_LAST_COIN_CLICK, lastCoinName).apply();
     }
 
     public String getApiKey() {
