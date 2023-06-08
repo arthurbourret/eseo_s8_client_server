@@ -1,6 +1,7 @@
 package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -45,8 +46,8 @@ public class CoinView extends RecyclerView.ViewHolder {
         itemView.findViewById(R.id.favorite).setBackgroundResource(0);
     }
 
-    public void setImageIcon(Drawable icon) {
-        binding.iconCoin.setImageDrawable(icon);
+    public void setImageIcon(Bitmap icon) {
+        binding.iconCoin.setImageBitmap(icon);
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

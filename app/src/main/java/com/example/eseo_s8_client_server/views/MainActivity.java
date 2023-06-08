@@ -1,6 +1,7 @@
 package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -74,20 +76,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateCoins(List<Coin> coins) {
-        adapter.setCoins(coins);
-        adapter.notifyDataSetChanged();
-    }
-
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.getData().observe(this, this::updateCoins);
+        viewModel.getData().observe(this, adapter::setCoins);
+        viewModel.getIcons().observe(this, adapter::setIcons);
     }
 
     @Override
