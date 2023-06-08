@@ -1,7 +1,7 @@
 package com.example.eseo_s8_client_server.network;
 
-import com.example.eseo_s8_client_server.models.BasicResponse;
-import com.example.eseo_s8_client_server.models.ListResponse;
+import com.example.eseo_s8_client_server.models.CoinResponse;
+import com.example.eseo_s8_client_server.models.CoinsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -9,10 +9,9 @@ import retrofit2.http.Path;
 
 // https://square.github.io/retrofit/
 public interface CoinRankingAPI {
-    // TODO: renommer les méthodes, elles ne récupèrent pas que des bitcoins
-    @GET(NetworkConstants.BITCOIN_COINS_PATH)
-    Call<ListResponse> getBitcoinCoins();
+    @GET(NetworkConstants.COINS_PATH)
+    Call<CoinsResponse> getCoinsResponse();
 
-    @GET(NetworkConstants.BITCOIN_COIN_PATH)
-    Call<BasicResponse> getBitcoin(@Path("uuri") String uuri);
+    @GET(NetworkConstants.COIN_PATH)
+    Call<CoinResponse> getCoinResponse(@Path("uuri") String uuri);
 }

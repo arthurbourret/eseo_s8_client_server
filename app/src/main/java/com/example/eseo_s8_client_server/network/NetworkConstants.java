@@ -2,8 +2,8 @@ package com.example.eseo_s8_client_server.network;
 
 public class NetworkConstants {
     public static final String BASE_URL = "https://coinranking1.p.rapidapi.com";
-    public static final String BITCOIN_COINS_PATH = "/coins";
-    public static final String BITCOIN_COIN_PATH = "/coin/{uuri}";
+    public static final String COINS_PATH = "/coins";
+    public static final String COIN_PATH = "/coin/{uuri}";
 
     public static final String HOST_HEADER_NAME = "x-rapidapi-host";
     public static final String HOST_HEADER_VALUE = "coinranking1.p.rapidapi.com";
