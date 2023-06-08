@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DataRepository {
     private final CoinDao sampleDao;
-    private final LiveData<List<Coin>> data;
+    private LiveData<List<Coin>> data;
 
     public DataRepository(Context applicationContext) {
         AppDatabase database = AppDatabase.getDatabase(applicationContext);
@@ -20,6 +20,10 @@ public class DataRepository {
 
     public LiveData<List<Coin>> getData() {
         return data;
+    }
+
+    public void fetchDataByName() {
+        this.data = sampleDao.getAllOrderByName();
     }
 
     public void insertData(Coin sampleModel) {

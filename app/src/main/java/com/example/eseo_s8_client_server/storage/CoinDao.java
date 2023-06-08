@@ -19,4 +19,11 @@ public interface CoinDao {
 
     @Query("SELECT * FROM coin_table")
     LiveData<List<Coin>> getAll();
+
+    @Query("SELECT * FROM coin_table ORDER BY name")
+    LiveData<List<Coin>> getAllOrderByName();
+
+    @Query("SELECT * FROM coin_table ORDER BY price")
+    LiveData<List<Coin>> getAllOrderByPrice();
+
 }
