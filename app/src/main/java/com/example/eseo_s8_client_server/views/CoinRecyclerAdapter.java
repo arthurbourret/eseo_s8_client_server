@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.R;
+import com.example.eseo_s8_client_server.databinding.LayoutListCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
@@ -38,9 +39,9 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     @NonNull
     @Override
     public CoinView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_list_coin, parent, false);
-        return new CoinView(view);
+        LayoutListCoinBinding binding = LayoutListCoinBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new CoinView(binding);
     }
 
     @Override

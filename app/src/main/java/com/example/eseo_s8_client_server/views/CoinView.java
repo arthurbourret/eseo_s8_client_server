@@ -3,6 +3,7 @@ package com.example.eseo_s8_client_server.views;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.Layout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,8 +19,9 @@ public class CoinView extends RecyclerView.ViewHolder {
     private LayoutListCoinBinding binding;
 
 
-    public CoinView(@NonNull View itemView) {
-        super(itemView);
+    public CoinView(@NonNull LayoutListCoinBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
     }
 
     @SuppressLint("SetTextI18n")
