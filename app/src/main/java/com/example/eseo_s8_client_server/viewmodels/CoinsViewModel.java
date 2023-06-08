@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
@@ -17,14 +18,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<Coin>> {
-    private final LiveData<List<Coin>> data;
+    private final MutableLiveData<List<Coin>> data;
     private final DataRepository dataRepository;
     private final CoinsData coins;
 
     public CoinsViewModel(@NotNull Application application) {
         super(application);
-        dataRepository = new DataRepository(application);
-        data = dataRepository.getData();
+        this.dataRepository = new DataRepository(application);
+        this.data = new MutableLiveData<>();
+        this.dataRepository.getData().observeForever(data::postValue);
 
         this.coins = new CoinsData();
     }
@@ -43,6 +45,14 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
                         handleResponse(response);
                     }
                 });
+    }
+
+    public void getFavorites() {
+        data.postValue(coins.getFavorites());
+    }
+
+    public void getAll() {
+        data.postValue(coins.getCoins());
     }
 
     private void handleResponse(CoinsResponse response) {

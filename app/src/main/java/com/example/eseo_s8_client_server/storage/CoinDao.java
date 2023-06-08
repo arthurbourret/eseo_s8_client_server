@@ -15,7 +15,7 @@ import com.example.eseo_s8_client_server.models.Coin;
 public interface CoinDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Coin sampleModel);
+    void insert(Coin coin);
 
     @Query("SELECT * FROM coin_table")
     LiveData<List<Coin>> getAll();

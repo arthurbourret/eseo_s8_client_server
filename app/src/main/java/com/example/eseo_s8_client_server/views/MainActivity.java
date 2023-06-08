@@ -46,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
         // set tab all coins
         TabLayout.Tab all = tabs.newTab().setText("All");
-        // all.view.setOnClickListener(v -> viewModel.fetchAll()); // TODO remettre a l'adpater ?
+        all.view.setOnClickListener(v -> viewModel.getAll()); // TODO remettre a l'adpater ?
         tabs.addTab(all, 0);
         // set tab favorites coins
         TabLayout.Tab favorites = tabs.newTab().setText("Favorites");
-        // favorites.view.setOnClickListener(v -> viewModel.fetchFavorites()); // TODO remettre a l'adpater ?
+        favorites.view.setOnClickListener(v -> viewModel.getFavorites()); // TODO remettre a l'adpater ?
         tabs.addTab(favorites, 1);
     }
 
