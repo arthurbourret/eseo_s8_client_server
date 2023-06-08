@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.PopupCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
+import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 
 public class CoinPopUp extends PopUpFragment {
     private PopupCoinBinding binding;
@@ -25,32 +26,40 @@ public class CoinPopUp extends PopUpFragment {
     @Override
     public void initPopUp() {
         // set favorite
-        ImageView imageView = view.findViewById(R.id.favorite);
         if (coin.isFavorite()) {
-            imageView.setImageResource(R.drawable.star_gold);
+            binding.favorite.setImageResource(R.drawable.star_gold);
         } else {
-            imageView.setImageResource(R.drawable.star_empty);
+            binding.favorite.setImageResource(R.drawable.star_empty);
         }
 
-        // set texts
-        ((TextView) view.findViewById(R.id.name_coin)).setText(coin.getName());
-        ((TextView) view.findViewById(R.id.symbol_coin)).setText(coin.getSymbol());
-        ((TextView) view.findViewById(R.id.price_coin)).setText(coin.getPrice() + "");
-        ((TextView) view.findViewById(R.id.change_coin)).setText(coin.getChange() + "");
-        ((TextView) view.findViewById(R.id.market_cap)).setText(coin.getMarketCap());
-        ((TextView) view.findViewById(R.id.volume_24h)).setText(coin.getVolume24H());
+        binding.favorite.setOnClickListener(v -> {
+            if (coin.isFavorite()){
+                coin.setFavorite(false);
+                PreferencesHelper.getInstance().removeCoinFromFavorite(coin.getUuid());
+            }else {
+                coin.setFavorite(true);
+                PreferencesHelper.getInstance().addCoinToFavorite(coin.getUuid());
+            }
+        });
 
-        // TODO add description
+        // set texts
+        binding.nameCoin.setText(coin.getName());
+        binding.symbolCoin.setText(coin.getSymbol());
+        binding.priceCoin.setText(coin.getPrice() + "");
+        binding.changeCoin.setText(coin.getChange() + "");
+        binding.marketCap.setText(coin.getMarketCap());
+        binding.volume24h.setText(coin.getVolume24H());
+        binding.description.setText(coin.getDescription());
 
         // set color
         try {
             int color = Color.parseColor(coin.getColor());
-            view.findViewById(R.id.couleur_coin).setBackgroundColor(color);
+            binding.couleurCoin.setBackgroundColor(color);
         } catch (Exception ignored) {
         }
     }
 
     public void setIcon(Drawable icon) {
-        ((ImageView) view.findViewById(R.id.icon_coin)).setImageDrawable(icon);
+        binding.iconCoin.setImageDrawable(icon);
     }
 }
