@@ -37,7 +37,7 @@ public abstract class NetworkCallBack {
             displayError();
         }
     }
-
+    // TODO: besoin de ça ?
     public abstract static class OkHttpCallback implements okhttp3.Callback {
 
         public abstract void onSuccess(okhttp3.ResponseBody response);

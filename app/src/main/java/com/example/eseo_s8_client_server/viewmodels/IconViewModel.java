@@ -23,7 +23,7 @@ import java.util.Map;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
-
+// TODO: je pense qu'on est sur de l'over engineering. Regarder la librairie Picasso pour loader les images
 public class IconViewModel extends ViewModel implements IViewModel<Map<String, Drawable>> {
     private final Map<String, Drawable> icons;
     private final MutableLiveData<Map<String, Drawable>> data = new MutableLiveData<>();

@@ -18,6 +18,7 @@ import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
 import com.example.eseo_s8_client_server.viewmodels.IconViewModel;
 
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
+    // TODO: une fois la récupération des images simplifiée, ne pas utilisé de VM ici. Les données sont transmises par l'activity
     private final ViewModelStoreOwner owner;
     private final CoinViewModel coinViewModel;
     private final IconViewModel iconViewModel;

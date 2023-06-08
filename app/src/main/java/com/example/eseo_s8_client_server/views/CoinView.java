@@ -22,7 +22,7 @@ public class CoinView extends RecyclerView.ViewHolder {
 
     @SuppressLint("SetTextI18n")
     public void initCoin(Coin coin) {
-
+// TODO: view binding
         imageView = itemView.findViewById(R.id.icon_coin);
         ((TextView) itemView.findViewById(R.id.name_coin)).setText(coin.getName());
         ((TextView) itemView.findViewById(R.id.symbol_coin)).setText(coin.getSymbol());

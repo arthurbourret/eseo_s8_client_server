@@ -16,7 +16,7 @@ import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.google.android.material.tabs.TabLayout;
-
+// TODO: attention, peu de temps à la fin du module pour terminer le projet. L'écran de détails devrait être terminé.
 public class MainActivity extends AppCompatActivity {
     private CoinsViewModel viewModel;
     private CoinRecyclerAdapter adapter;
@@ -26,9 +26,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO change binding method ?
+        // TODO: oui,n utiliser le view bindingr
         setContentView(R.layout.activity_main);
 
         // TODO change fetch apikey method
+        // TODO: essayer de ne pas utiliser les preferences dans l'activity
         PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
 
         // init components
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         this.initSyncBtn();
     }
 
-
+    // TODO: tabs ? je vous conseille de commencer simple (2e activity) et de faire plus complexe si vous avez le temps
     private void initTabs() {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setSelectedTabIndicatorColor(Color.WHITE);

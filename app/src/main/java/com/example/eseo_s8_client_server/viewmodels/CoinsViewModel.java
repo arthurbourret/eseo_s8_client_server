@@ -16,7 +16,7 @@ public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
     public LiveData<CoinsData> getData() {
         return data;
     }
-
+    // TODO: pourquoi le varargs en paramètre ?
     public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI
                 .getBitcoinCoins()

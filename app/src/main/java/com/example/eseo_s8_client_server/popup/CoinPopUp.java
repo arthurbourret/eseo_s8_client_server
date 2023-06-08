@@ -12,6 +12,7 @@ import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.views.CoinRecyclerAdapter;
 
 public class CoinPopUp extends PopUpFragment {
+    // TODO: est-ce qu'on peut éviter de garder le coin ici ? en le passant dans le init ?
     private final Coin coin;
     private final CoinRecyclerAdapter.ChangeClick callBack;
 
