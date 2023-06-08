@@ -34,11 +34,11 @@ public class CoinPopUp extends PopUpFragment {
 
         binding.favorite.setOnClickListener(v -> {
             if (coin.isFavorite()){
-                coin.setFavorite(false);
-                PreferencesHelper.getInstance().removeCoinFromFavorite(coin.getUuid());
+
+                PreferencesHelper.getInstance().removeCoinFromFavorite(coin);
             }else {
-                coin.setFavorite(true);
-                PreferencesHelper.getInstance().addCoinToFavorite(coin.getUuid());
+
+                PreferencesHelper.getInstance().addCoinToFavorite(coin);
             }
         });
 
