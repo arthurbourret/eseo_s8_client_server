@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.eseo_s8_client_server.models.BasicResponse;
+import com.example.eseo_s8_client_server.models.CoinResponse;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.network.NetworkCallBack;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
@@ -24,16 +24,16 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
         String uuid = (String) parameters[0];
 
         RetrofitNetworkManager.coinRankingAPI
-                .getBitcoin(uuid)
-                .enqueue(new NetworkCallBack.RetrofitCallback<BasicResponse>() {
+                .getCoinResponse(uuid)
+                .enqueue(new NetworkCallBack.RetrofitCallback<CoinResponse>() {
                     @Override
-                    public void onSuccess(BasicResponse response) {
+                    public void onSuccess(CoinResponse response) {
                         handleResponse(response);
                     }
                 });
     }
 
-    private void handleResponse(BasicResponse response) {
+    private void handleResponse(CoinResponse response) {
         data.postValue(response.getData());
     }
 }

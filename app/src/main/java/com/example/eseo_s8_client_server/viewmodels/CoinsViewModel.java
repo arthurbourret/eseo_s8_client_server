@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.eseo_s8_client_server.models.CoinsData;
-import com.example.eseo_s8_client_server.models.ListResponse;
+import com.example.eseo_s8_client_server.models.CoinsResponse;
 import com.example.eseo_s8_client_server.network.NetworkCallBack;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 
@@ -19,16 +19,16 @@ public class CoinsViewModel extends ViewModel implements IViewModel<CoinsData> {
     // TODO: pourquoi le varargs en paramètre ?
     public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI
-                .getBitcoinCoins()
-                .enqueue(new NetworkCallBack.RetrofitCallback<ListResponse>() {
+                .getCoinsResponse()
+                .enqueue(new NetworkCallBack.RetrofitCallback<CoinsResponse>() {
                     @Override
-                    public void onSuccess(ListResponse response) {
+                    public void onSuccess(CoinsResponse response) {
                         handleResponse(response);
                     }
                 });
     }
 
-    private void handleResponse(ListResponse response) {
+    private void handleResponse(CoinsResponse response) {
         CoinsData coinsData = new CoinsData(response.getData());
         this.coins = coinsData;
         this.data.postValue(coinsData);
