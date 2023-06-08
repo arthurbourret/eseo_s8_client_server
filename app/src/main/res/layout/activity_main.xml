@@ -50,4 +50,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/stat_notify_sync" />
 
+    <Button
+        android:id="@+id/order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ordre"
+        app:layout_constraintBottom_toTopOf="@+id/sync"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
