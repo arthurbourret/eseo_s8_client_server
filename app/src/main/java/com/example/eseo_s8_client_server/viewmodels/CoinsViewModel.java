@@ -1,10 +1,8 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,96 +10,148 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.models.CoinsResponse;
-import com.example.eseo_s8_client_server.network.NetworkCallBack;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 import com.example.eseo_s8_client_server.storage.DataRepository;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<Coin>> {
-    private final OkHttpClient client = new OkHttpClient();
+    private enum Onglet {
+        TOUS,
+        FAVORIS,
+    }
 
-    private final MutableLiveData<List<Coin>> data;
-    private final MutableLiveData<Map<String, Bitmap>> icons;
+    private final MutableLiveData<List<Coin>> data = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final CoinsData coins = new CoinsData();
     private final DataRepository dataRepository;
-    private final CoinsData coins;
+    private Onglet current = Onglet.TOUS;
+
+    private final MutableLiveData<String> orderMessage = new MutableLiveData<>();
+    private String orderColumn;
+    private boolean order;
 
     public CoinsViewModel(@NotNull Application application) {
         super(application);
         this.dataRepository = new DataRepository(application);
-        this.data = new MutableLiveData<>();
-        this.dataRepository.getData().observeForever(data::postValue);
-        this.icons = new MutableLiveData<>();
 
-        this.coins = new CoinsData();
+        // init data from db
+        this.dataRepository.fetchData();
+        this.connectDRtoData();
     }
 
     public LiveData<List<Coin>> getData() {
         return data;
     }
 
-    public LiveData<Map<String, Bitmap>> getIcons() {
-        return icons;
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    public LiveData<String> getOrderMessage() {
+        return orderMessage;
     }
 
     // TODO: pourquoi le varargs en paramètre ?
     public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI
                 .getCoinsResponse()
-                .enqueue(new NetworkCallBack.RetrofitCallback<CoinsResponse>() {
+                .enqueue(new Callback<CoinsResponse>() {
                     @Override
-                    public void onSuccess(CoinsResponse response) {
-                        handleResponse(response);
+                    public void onResponse(@NonNull Call<CoinsResponse> call,
+                                           @NonNull Response<CoinsResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            handleResponse(response.body());
+                        } else errorMessage.postValue("Data was not loaded properly");
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<CoinsResponse> call,
+                                          @NonNull Throwable t) {
+                        errorMessage.postValue("Could not fetch data");
                     }
                 });
     }
 
     public void getFavorites() {
         data.postValue(coins.getFavorites());
+        current = Onglet.FAVORIS;
     }
 
     public void getAll() {
         data.postValue(coins.getCoins());
+        current = Onglet.TOUS;
     }
 
-    private void fetchIcons(List<Coin> coins) {
-        for (Coin coin : coins) {
-            String url = coin.getIconUrl();
-            url.replace(".svg", ".png");
-            fetchIcon(url, coin.getUuid());
+    public Boolean noOrder() {
+        orderColumn = null;
+        dataRepository.fetchData();
+        orderMessage.postValue("Reset order");
+        connectDRtoData();
+        return null;
+    }
+
+    public Boolean orderByName() {
+        if (Objects.equals(orderColumn, "name") && !order) {
+            return noOrder();
+        } else {
+            boolean boolOrder = !Objects.equals(orderColumn, "name");
+            this.orderColumn = "name";
+            this.order = boolOrder;
+
+            dataRepository.fetchDataByName(boolOrder);
+            orderMessage.postValue("Order by name " + (boolOrder ? "▴" : "▾"));
+            connectDRtoData();
+
+            return boolOrder;
         }
     }
 
-    private void fetchIcon(String url, String uuid) {
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(new NetworkCallBack.OkHttpCallback() {
-            @Override
-            public void onSuccess(ResponseBody response) {
-                Bitmap icon = getIconFromStream(response.byteStream());
-                Map<String, Bitmap> tmp = icons.getValue();
-                if (tmp == null) tmp = new HashMap<>();
-                tmp.put(uuid, icon);
-                icons.postValue(tmp);
-            }
+    public Boolean orderByPrice() {
+        if (Objects.equals(orderColumn, "price") && order) {
+            return noOrder();
+        } else {
+            boolean boolOrder = Objects.equals(orderColumn, "price");
+            this.orderColumn = "price";
+            this.order = boolOrder;
+
+            dataRepository.fetchDataByPrice(boolOrder);
+            orderMessage.postValue("Order by price " + (boolOrder ? "▴" : "▾"));
+            connectDRtoData();
+
+            return boolOrder;
+        }
+    }
+
+    private void connectDRtoData() {
+        dataRepository.getData().observeForever(coinList -> {
+            coins.setCoinList(coinList);
+            getFavoriteFromPrefs(coins.getCoins());
+
+            if (current == Onglet.TOUS) data.postValue(coins.getCoins());
+            else data.postValue(coins.getFavorites());
         });
+    }
+
+    private void getFavoriteFromPrefs(List<Coin> coins) {
+        List<String> favorites = PreferencesHelper.getInstance().getFavoriteCoinsIds();
+        if (favorites == null || favorites.size() < 1) return;
+
+        for (Coin coin : coins) {
+            if (favorites.contains(coin.getUuid())) coin.setFavorite(true);
+        }
     }
 
     private void handleResponse(CoinsResponse response) {
         this.coins.setCoinList(response.getData());
-        this.fetchIcons(coins.getCoins());
         saveCoins(coins.getCoins());
     }
 
@@ -109,11 +159,5 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         for (Coin coin : coins) {
             this.dataRepository.insertData(coin);
         }
-    }
-
-    private Bitmap getIconFromStream(InputStream stream) {
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(stream);
-
-        return BitmapFactory.decodeStream(bufferedInputStream);
     }
 }

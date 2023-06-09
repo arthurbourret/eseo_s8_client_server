@@ -20,10 +20,13 @@ public interface CoinDao {
     @Query("SELECT * FROM coin_table")
     LiveData<List<Coin>> getAll();
 
-    @Query("SELECT * FROM coin_table ORDER BY name")
-    LiveData<List<Coin>> getAllOrderByName();
+    @Query("SELECT * FROM coin_table ORDER BY " +
+            "CASE WHEN :order = 1 THEN name END ASC, \n" +
+            "CASE WHEN :order = 0 THEN name END DESC")
+    LiveData<List<Coin>> getAllOrderByName(boolean order);
 
-    @Query("SELECT * FROM coin_table ORDER BY price")
-    LiveData<List<Coin>> getAllOrderByPrice();
-
+    @Query("SELECT * FROM coin_table ORDER BY " +
+            "CASE WHEN :order = 1 THEN price END ASC, \n" +
+            "CASE WHEN :order = 0 THEN price END DESC")
+    LiveData<List<Coin>> getAllOrderByPrice(boolean order);
 }

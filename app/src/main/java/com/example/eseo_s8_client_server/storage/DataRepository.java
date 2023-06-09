@@ -15,20 +15,25 @@ public class DataRepository {
     public DataRepository(Context applicationContext) {
         AppDatabase database = AppDatabase.getDatabase(applicationContext);
         this.sampleDao = database.coinDaoDao();
-        this.data = sampleDao.getAll();
     }
 
     public LiveData<List<Coin>> getData() {
         return data;
     }
 
-    public void fetchDataByName() {
-        this.data = sampleDao.getAllOrderByName();
+    public void fetchData() {
+        this.data = sampleDao.getAll();
+    }
+
+    public void fetchDataByName(boolean order) {
+        this.data = sampleDao.getAllOrderByName(order);
+    }
+
+    public void fetchDataByPrice(boolean order) {
+        this.data = sampleDao.getAllOrderByPrice(order);
     }
 
     public void insertData(Coin sampleModel) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            sampleDao.insert(sampleModel);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> sampleDao.insert(sampleModel));
     }
 }

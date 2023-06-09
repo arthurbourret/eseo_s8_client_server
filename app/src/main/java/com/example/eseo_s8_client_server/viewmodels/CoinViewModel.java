@@ -1,13 +1,17 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.eseo_s8_client_server.models.CoinResponse;
 import com.example.eseo_s8_client_server.models.Coin;
-import com.example.eseo_s8_client_server.network.NetworkCallBack;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
     private final MutableLiveData<Coin> data = new MutableLiveData<>();
@@ -26,10 +30,16 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
 
         RetrofitNetworkManager.coinRankingAPI
                 .getCoinResponse(uuid)
-                .enqueue(new NetworkCallBack.RetrofitCallback<CoinResponse>() {
+                .enqueue(new Callback<CoinResponse>() {
                     @Override
-                    public void onSuccess(CoinResponse response) {
-                        handleResponse(response);
+                    public void onResponse(@NonNull Call<CoinResponse> call,
+                                           @NonNull Response<CoinResponse> response) {
+                        if (!response.isSuccessful() || response.body() == null) return;
+                        handleResponse(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<CoinResponse> call, @NonNull Throwable t) {
                     }
                 });
     }

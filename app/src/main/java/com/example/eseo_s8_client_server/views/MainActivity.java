@@ -2,7 +2,7 @@ package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,11 +36,40 @@ public class MainActivity extends AppCompatActivity {
         // TODO: essayer de ne pas utiliser les preferences dans l'activity
         PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
 
+        /* TODO list
+         - display fav quand quite popup
+         - mieux order btn
+         - chercher bugs
+         - icon appli ?
+         */
+
         // init components
         this.initTabs();
         this.initRecyclerCoinView();
         this.initViewModel();
         this.initSyncBtn();
+        this.initOrderBtn();
+    }
+
+    private void initOrderBtn() {
+        binding.orderName.setOnClickListener(v -> {
+            Boolean order = viewModel.orderByName();
+            String message = "Nom";
+            if (order != null) message += order ? " ▴" : " ▾";
+            ((TextView) v).setText(message);
+        });
+
+        binding.orderPrice.setOnClickListener(v -> {
+            Boolean order = viewModel.orderByPrice();
+            String message = "Prix";
+            if (order != null) message += order ? " ▴" : " ▾";
+            ((TextView) v).setText(message);
+        });
+
+        viewModel.getOrderMessage().observe(this, message -> Toast
+                .makeText(MainActivity.this, message, Toast.LENGTH_SHORT)
+                .show()
+        );
     }
 
     private void initTabs() {
@@ -87,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
         // view model for coin's information
         infoViewModel = new ViewModelProvider(this).get(CoinViewModel.class);
+        viewModel.getErrorMessage().observe(this, message -> Toast
+                .makeText(MainActivity.this, "⚠ " + message, Toast.LENGTH_SHORT)
+                .show()
+        );
     }
 
     private void initSyncBtn() {
