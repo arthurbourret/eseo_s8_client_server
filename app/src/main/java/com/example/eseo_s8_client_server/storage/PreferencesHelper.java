@@ -15,13 +15,9 @@ import java.util.List;
 
 public class PreferencesHelper {
     private static PreferencesHelper INSTANCE;
-
     private final SharedPreferences preferences;
-    // TODO: nom explicite
-    private static final String SHARED_PREFERENCES_NAME = "loutre";
+    private static final String SHARED_PREFERENCES_NAME = "sharedPreferenceName";
     private static final String SHARED_PREFERENCES_FAVORITE_COINS = "favoriteCoins";
-    // TODO: plus besoin
-    private static final String API_KEY = "apiKey";
 
     private List<String> favoriteCoins;
 
@@ -37,14 +33,6 @@ public class PreferencesHelper {
             INSTANCE = new PreferencesHelper();
         }
         return INSTANCE;
-    }
-
-    public String getApiKey() {
-        return preferences.getString(API_KEY, null);
-    }
-
-    public void setApiKey(String apiKey) {
-        this.preferences.edit().putString(API_KEY, apiKey).apply();
     }
 
     private void initFavoriteCoinsIds() {
