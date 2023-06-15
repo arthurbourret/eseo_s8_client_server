@@ -37,6 +37,10 @@ public class CoinsData {
         return coinList;
     }
 
+    public void removeCoin(String uuid) {
+        this.coinList.removeIf(coin -> coin.getUuid().equals(uuid));
+    }
+
     public List<Coin> getFavorites() {
         return coinList.stream().filter(Coin::isFavorite).collect(Collectors.toList());
     }

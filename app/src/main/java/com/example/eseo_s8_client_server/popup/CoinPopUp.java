@@ -11,7 +11,7 @@ import android.widget.PopupWindow;
 import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.PopupCoinBinding;
 import com.example.eseo_s8_client_server.models.Coin;
-import com.example.eseo_s8_client_server.storage.PreferencesHelper;
+import com.example.eseo_s8_client_server.models.Listener;
 import com.squareup.picasso.Picasso;
 
 public class CoinPopUp implements PopUp {
@@ -41,20 +41,6 @@ public class CoinPopUp implements PopUp {
             unsetFavorite();
         }
 
-        binding.favorite.setOnClickListener(v -> {
-            if (coin.isFavorite()) {
-                unsetFavorite();
-
-                PreferencesHelper.getInstance().removeCoinFromFavorite(coin);
-                // TODO changer de place + notify recycler du changement
-            } else {
-                setFavorite();
-
-                PreferencesHelper.getInstance().addCoinToFavorite(coin);
-                // TODO changer de place + notify recycler du changement
-            }
-        });
-
         // set close btn
         binding.closePopUp.setOnClickListener(v -> popupWindow.dismiss());
 
@@ -78,6 +64,18 @@ public class CoinPopUp implements PopUp {
             binding.couleurCoin.setBackgroundColor(color);
         } catch (Exception ignored) {
         }
+    }
+
+    public void initToggleFavorite(Coin coin, Listener callback) {
+        binding.favorite.setOnClickListener(v -> {
+            if (coin.isFavorite()) {
+                unsetFavorite();
+            } else {
+                setFavorite();
+            }
+
+            callback.onClick(coin);
+        });
     }
 
     private void setFavorite() {

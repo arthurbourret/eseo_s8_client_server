@@ -37,10 +37,8 @@ public class MainActivity extends AppCompatActivity {
         PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
 
         /* TODO list
-         - display fav quand quite popup
-         - mieux order btn
+         - utiliser methode propre pr change order
          - chercher bugs
-         - icon appli ?
          */
 
         // init components
@@ -51,8 +49,10 @@ public class MainActivity extends AppCompatActivity {
         this.initOrderBtn();
     }
 
+    @SuppressLint("SetTextI18n")
     private void initOrderBtn() {
         binding.orderName.setOnClickListener(v -> {
+            ((TextView) binding.orderPrice).setText("Prix");
             Boolean order = viewModel.orderByName();
             String message = "Nom";
             if (order != null) message += order ? " ▴" : " ▾";
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.orderPrice.setOnClickListener(v -> {
+            ((TextView) binding.orderPrice).setText("Nom");
             Boolean order = viewModel.orderByPrice();
             String message = "Prix";
             if (order != null) message += order ? " ▴" : " ▾";
@@ -86,28 +87,32 @@ public class MainActivity extends AppCompatActivity {
         tabs.addTab(favorites, 1);
     }
 
-    private void initRecyclerCoinView() {
-        adapter = new CoinRecyclerAdapter(openCoinListener);
-        RecyclerView recyclerView = binding.listCoins;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-    }
-
-    private final Listener openCoinListener = coin -> {
+    private final Listener openCoinPopUpListener = coin -> {
         // clean all prev observers
         infoViewModel.getData().removeObservers(MainActivity.this);
 
         // display pop up
         CoinPopUp popup = new CoinPopUp(MainActivity.this);
         popup.initContent(coin);
+        popup.initToggleFavorite(coin, viewModel.changeFavoriteListener);
 
         // fetch data for one coin
-        infoViewModel.getData().observe(MainActivity.this, popup::initContent);
+        infoViewModel.getData().observe(MainActivity.this, coinDetailed -> {
+            coinDetailed.setFavorite(coin.isFavorite());
+            popup.initContent(coinDetailed);
+        });
         infoViewModel.fetchData(coin.getUuid());
 
         popup.displayPopUp();
     };
+
+    private void initRecyclerCoinView() {
+        adapter = new CoinRecyclerAdapter(openCoinPopUpListener);
+        RecyclerView recyclerView = binding.listCoins;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+    }
 
     private void initViewModel() {
         // view model for all coins

@@ -77,7 +77,7 @@ public class PreferencesHelper {
     }
 
     public void removeCoinFromFavorite(Coin coin) {
-        if (!(favoriteCoins.contains(coin.getUuid())) || coin.isFavorite()) return;
+        if (!(favoriteCoins.contains(coin.getUuid())) || !coin.isFavorite()) return;
         // if coin in favs
         favoriteCoins.remove(coin.getUuid());
         saveFavorites();

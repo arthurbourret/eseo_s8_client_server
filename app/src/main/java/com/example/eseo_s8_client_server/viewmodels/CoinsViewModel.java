@@ -1,5 +1,6 @@
 package com.example.eseo_s8_client_server.viewmodels;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.eseo_s8_client_server.models.Coin;
 import com.example.eseo_s8_client_server.models.CoinsData;
 import com.example.eseo_s8_client_server.models.CoinsResponse;
+import com.example.eseo_s8_client_server.models.Listener;
 import com.example.eseo_s8_client_server.network.RetrofitNetworkManager;
 import com.example.eseo_s8_client_server.storage.DataRepository;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
@@ -131,7 +133,24 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public final Listener changeFavoriteListener = coin -> {
+        if (coin.isFavorite()) {
+            PreferencesHelper.getInstance().removeCoinFromFavorite(coin);
+        } else {
+            PreferencesHelper.getInstance().addCoinToFavorite(coin);
+        }
+
+        if (current == Onglet.FAVORIS) {
+            if (!coin.isFavorite()) coins.removeCoin(coin.getUuid());
+            data.postValue(coins.getFavorites());
+        } else {
+            data.postValue(coins.getCoins());
+        }
+    };
+
     private void connectDRtoData() {
+        // TODO dataRepository.getData().removeObservers();
         dataRepository.getData().observeForever(coinList -> {
             coins.setCoinList(coinList);
             getFavoriteFromPrefs(coins.getCoins());

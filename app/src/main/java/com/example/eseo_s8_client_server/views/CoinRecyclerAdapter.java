@@ -16,11 +16,11 @@ import java.util.List;
 
 public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
     private final CoinsData coins;
-    private final Listener listener;
+    private final Listener openPopUpListener;
 
     public CoinRecyclerAdapter(Listener listener) {
         this.coins = new CoinsData();
-        this.listener = listener;
+        this.openPopUpListener = listener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -45,7 +45,7 @@ public class CoinRecyclerAdapter extends RecyclerView.Adapter<CoinView> {
         // set holder
         holder.initCoin(coin);
         // set on click
-        holder.setOnClickListener(v -> listener.onClick(coin));
+        holder.setOnClickListener(v -> openPopUpListener.onClick(coin));
     }
 
     @Override
