@@ -170,10 +170,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.getData().observe(this, adapter::setCoins);
+        viewModel.getData().observe(this, coins -> {
+            adapter.setCoins(coins);
+            binding.size.setText(coins.size() + "");
+        });
     }
 
     @Override
