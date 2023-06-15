@@ -27,7 +27,7 @@ public class CoinView extends RecyclerView.ViewHolder {
         binding.symbolCoin.setText(coin.getSymbol());
         binding.priceCoin.setText(coin.getPrice() + "");
         binding.changeCoin.setText(coin.getChange() + "");
-        binding.coinRank.setText(coin.getRank() + "");;
+        binding.coinRank.setText(coin.getRank() + "");
 
         // show favorite status
         if (coin.isFavorite()) setFavorite();

@@ -11,11 +11,11 @@
     <string name="tab_all">All</string>
     <string name="tab_favs">Favorites</string>
 
-    <string name="crypto">"Crypto's name : "</string>
-    <string name="symbol">"Symbol : "</string>
-    <string name="actual_price">"Actual price : "</string>
+    <string name="crypto">Crypto\'s name :</string>
+    <string name="symbol">Symbol :</string>
+    <string name="actual_price">Actual price :</string>
     <string name="change">Rate :</string>
-    <string name="color">"Color : "</string>
+    <string name="color">Color :</string>
     <string name="rank">Rank:</string>
     <string name="volume">Volume /24h:</string>
     <string name="cap">Market Cap:</string>
