@@ -43,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private void initOrderBtn() {
         String colPrice = string(R.string.col_price);
         String colName = string(R.string.col_name);
+        String colRank = "Rank";
         binding.orderName.setOnClickListener(v -> {
             binding.orderPrice.setText(colPrice);
+            binding.orderRank.setText(colRank);
             Boolean order = viewModel.orderByName();
 
             String message = colName;
@@ -53,10 +55,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.orderPrice.setOnClickListener(v -> {
-            binding.orderPrice.setText(colName);
+            binding.orderName.setText(colName);
+            binding.orderRank.setText(colRank);
             Boolean order = viewModel.orderByPrice();
 
             String message = colPrice;
+            if (order != null) message += order ? " ▴" : " ▾";
+            ((TextView) v).setText(message);
+        });
+
+        binding.orderRank.setOnClickListener(v -> {
+            binding.orderName.setText(colName);
+            binding.orderPrice.setText(colPrice);
+            Boolean order = viewModel.orderByRank();
+
+            String message = colRank;
             if (order != null) message += order ? " ▴" : " ▾";
             ((TextView) v).setText(message);
         });
