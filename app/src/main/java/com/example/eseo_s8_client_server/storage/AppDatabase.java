@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 @Database(entities = {Coin.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "sample_database";
+
     public abstract CoinDao coinDaoDao();
 
     private static volatile AppDatabase INSTANCE;

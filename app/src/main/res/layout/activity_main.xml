@@ -40,7 +40,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order by:"
+            android:text="@string/order_by"
             android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
             android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Nom"
+            android:text="@string/col_name"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="1dp"
-            android:text="Prix"
+            android:text="@string/col_price"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/orderName"
             app:layout_constraintTop_toTopOf="parent" />

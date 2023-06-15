@@ -2,8 +2,6 @@ package com.example.eseo_s8_client_server.network;
 
 import androidx.annotation.NonNull;
 
-import com.example.eseo_s8_client_server.storage.PreferencesHelper;
-
 import java.io.IOException;
 
 import okhttp3.Interceptor;

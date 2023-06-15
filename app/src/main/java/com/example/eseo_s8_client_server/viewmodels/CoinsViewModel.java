@@ -74,7 +74,6 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         return orderMessage;
     }
 
-    // TODO: pourquoi le varargs en paramètre ?
     public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI
                 .getCoinsResponse()

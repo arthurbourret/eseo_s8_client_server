@@ -1,5 +1,7 @@
 package com.example.eseo_s8_client_server.models;
-// TODO: décomposer, un fichier pour chaque classe, List plutôt que []
+
+import java.util.List;
+
 public class CoinsResponse {
     private String status;
     private Data data;
@@ -8,14 +10,14 @@ public class CoinsResponse {
         return status;
     }
 
-    public Coin[] getData() {
+    public List<Coin> getData() {
         return data.getCoins();
     }
 
     static class Data {
-        private Coin[] coins;
+        private List<Coin> coins;
 
-        public Coin[] getCoins() {
+        public List<Coin> getCoins() {
             return coins;
         }
     }

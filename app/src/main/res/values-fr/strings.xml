@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="fetch">Récupération des données</string>
+    <string name="snc_btn">sync button</string>
+
+    <string name="order_by">Ordonner par</string>
+    <string name="col_price">Prix</string>
+    <string name="col_name">Nom</string>
+
+    <string name="tab_all">Tous</string>
+    <string name="tab_favs">Favoris</string>
+
+    <string name="crypto">Nom de la crypto : </string>
+    <string name="symbol">Symbole : </string>
+    <string name="actual_price">Prix actuel : </string>
+    <string name="change">Taux de change : </string>
+    <string name="color">Couleur : </string>
+    <string name="rank">Rang:</string>
+    <string name="volume">Volume /24h:</string>
+    <string name="cap">Capitalisation du marché:</string>
+</resources>

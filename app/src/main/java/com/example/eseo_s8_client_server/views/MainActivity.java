@@ -10,12 +10,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eseo_s8_client_server.R;
 import com.example.eseo_s8_client_server.databinding.ActivityMainBinding;
 import com.example.eseo_s8_client_server.models.Listener;
-import com.example.eseo_s8_client_server.network.AuthInterceptor;
-import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
-import com.example.eseo_s8_client_server.storage.PreferencesHelper;
 import com.example.eseo_s8_client_server.viewmodels.CoinViewModel;
 import com.example.eseo_s8_client_server.viewmodels.CoinsViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -43,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void initOrderBtn() {
-        String colPrice = "Prix";
-        String colName = "Nom";
+        String colPrice = string(R.string.col_price);
+        String colName = string(R.string.col_name);
         binding.orderName.setOnClickListener(v -> {
-            ((TextView) binding.orderPrice).setText(colPrice);
+            binding.orderPrice.setText(colPrice);
             Boolean order = viewModel.orderByName();
 
             String message = colName;
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.orderPrice.setOnClickListener(v -> {
-            ((TextView) binding.orderPrice).setText(colName);
+            binding.orderPrice.setText(colName);
             Boolean order = viewModel.orderByPrice();
 
             String message = colPrice;
@@ -73,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = binding.tabs;
 
         // set tab all coins
-        TabLayout.Tab all = tabs.newTab().setText("All");
+        TabLayout.Tab all = tabs.newTab().setText(string(R.string.tab_all));
         all.view.setOnClickListener(v -> viewModel.getAll());
         tabs.addTab(all, 0);
 
         // set tab favorites coins
-        TabLayout.Tab favorites = tabs.newTab().setText("Favorites");
+        TabLayout.Tab favorites = tabs.newTab().setText(string(R.string.tab_favs));
         favorites.view.setOnClickListener(v -> viewModel.getFavorites());
         tabs.addTab(favorites, 1);
     }
@@ -125,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSyncBtn() {
         binding.sync.setOnClickListener(v -> {
-            Toast.makeText(MainActivity.this, "Fetch data", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, string(R.string.fetch), Toast.LENGTH_LONG)
+                    .show();
             viewModel.fetchData();
         });
     }
@@ -140,5 +139,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         viewModel.getData().removeObservers(this);
+    }
+
+    private String string(int id) {
+        return getResources().getString(id);
     }
 }
