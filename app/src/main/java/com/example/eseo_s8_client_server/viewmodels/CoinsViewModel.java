@@ -141,6 +141,21 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         }
     }
 
+    public Boolean orderByRank() {
+        if (Objects.equals(orderColumn, "rank") && order) {
+            return noOrder();
+        } else {
+            boolean boolOrder = Objects.equals(orderColumn, "rank");
+            this.orderColumn = "rank";
+            this.order = boolOrder;
+
+            dataRepository.fetchDataByRank(boolOrder);
+            orderMessage.postValue("Order by rank " + (boolOrder ? "▴" : "▾"));
+
+            return boolOrder;
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     public final Listener changeFavoriteListener = coin -> {
         if (coin.isFavorite()) {
