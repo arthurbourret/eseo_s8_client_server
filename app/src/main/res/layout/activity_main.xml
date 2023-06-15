@@ -66,6 +66,18 @@
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/orderName"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/orderRank"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="1dp"
+            android:text="Rank"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/orderPrice"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
