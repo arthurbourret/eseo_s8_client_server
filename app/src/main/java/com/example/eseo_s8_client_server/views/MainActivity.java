@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eseo_s8_client_server.databinding.ActivityMainBinding;
 import com.example.eseo_s8_client_server.models.Listener;
+import com.example.eseo_s8_client_server.network.AuthInterceptor;
 import com.example.eseo_s8_client_server.network.NetworkConstants;
 import com.example.eseo_s8_client_server.popup.CoinPopUp;
 import com.example.eseo_s8_client_server.storage.PreferencesHelper;
@@ -31,15 +32,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // TODO change fetch apikey method
-        // TODO: essayer de ne pas utiliser les preferences dans l'activity
-        PreferencesHelper.getInstance().setApiKey(NetworkConstants.KEY_HEADER_VALUE);
-
-        /* TODO list
-         - utiliser methode propre pr change order
-         - chercher bugs
-         */
 
         // init components
         this.initTabs();
