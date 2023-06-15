@@ -41,13 +41,25 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     private String orderColumn;
     private boolean order;
 
+    private final PreferencesHelper preferences = PreferencesHelper.getInstance();
+
     public CoinsViewModel(@NotNull Application application) {
         super(application);
         this.dataRepository = new DataRepository(application);
 
         // init data from db
+        this.bindDataRepositoryToData();
         this.dataRepository.fetchData();
-        this.connectDRtoData();
+    }
+
+    private void bindDataRepositoryToData() {
+        dataRepository.getData().observeForever(coinList -> {
+            coins.setCoinList(coinList);
+            getFavoriteFromPrefs(coins.getCoins());
+
+            if (current == Onglet.TOUS) data.postValue(coins.getCoins());
+            else data.postValue(coins.getFavorites());
+        });
     }
 
     public LiveData<List<Coin>> getData() {
@@ -97,7 +109,6 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         orderColumn = null;
         dataRepository.fetchData();
         orderMessage.postValue("Reset order");
-        connectDRtoData();
         return null;
     }
 
@@ -111,7 +122,6 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
 
             dataRepository.fetchDataByName(boolOrder);
             orderMessage.postValue("Order by name " + (boolOrder ? "▴" : "▾"));
-            connectDRtoData();
 
             return boolOrder;
         }
@@ -127,7 +137,6 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
 
             dataRepository.fetchDataByPrice(boolOrder);
             orderMessage.postValue("Order by price " + (boolOrder ? "▴" : "▾"));
-            connectDRtoData();
 
             return boolOrder;
         }
@@ -136,9 +145,9 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     @SuppressLint("NotifyDataSetChanged")
     public final Listener changeFavoriteListener = coin -> {
         if (coin.isFavorite()) {
-            PreferencesHelper.getInstance().removeCoinFromFavorite(coin);
+            preferences.removeCoinFromFavorite(coin);
         } else {
-            PreferencesHelper.getInstance().addCoinToFavorite(coin);
+            preferences.addCoinToFavorite(coin);
         }
 
         if (current == Onglet.FAVORIS) {
@@ -149,19 +158,8 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         }
     };
 
-    private void connectDRtoData() {
-        // TODO dataRepository.getData().removeObservers();
-        dataRepository.getData().observeForever(coinList -> {
-            coins.setCoinList(coinList);
-            getFavoriteFromPrefs(coins.getCoins());
-
-            if (current == Onglet.TOUS) data.postValue(coins.getCoins());
-            else data.postValue(coins.getFavorites());
-        });
-    }
-
     private void getFavoriteFromPrefs(List<Coin> coins) {
-        List<String> favorites = PreferencesHelper.getInstance().getFavoriteCoinsIds();
+        List<String> favorites = preferences.getFavoriteCoinsIds();
         if (favorites == null || favorites.size() < 1) return;
 
         for (Coin coin : coins) {

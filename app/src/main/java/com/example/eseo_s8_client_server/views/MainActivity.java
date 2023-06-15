@@ -51,18 +51,22 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void initOrderBtn() {
+        String colPrice = "Prix";
+        String colName = "Nom";
         binding.orderName.setOnClickListener(v -> {
-            ((TextView) binding.orderPrice).setText("Prix");
+            ((TextView) binding.orderPrice).setText(colPrice);
             Boolean order = viewModel.orderByName();
-            String message = "Nom";
+
+            String message = colName;
             if (order != null) message += order ? " ▴" : " ▾";
             ((TextView) v).setText(message);
         });
 
         binding.orderPrice.setOnClickListener(v -> {
-            ((TextView) binding.orderPrice).setText("Nom");
+            ((TextView) binding.orderPrice).setText(colName);
             Boolean order = viewModel.orderByPrice();
-            String message = "Prix";
+
+            String message = colPrice;
             if (order != null) message += order ? " ▴" : " ▾";
             ((TextView) v).setText(message);
         });

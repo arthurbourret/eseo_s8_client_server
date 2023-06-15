@@ -3,6 +3,7 @@ package com.example.eseo_s8_client_server.storage;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.example.eseo_s8_client_server.models.Coin;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class DataRepository {
     private final CoinDao sampleDao;
-    private LiveData<List<Coin>> data;
+    private final MediatorLiveData<List<Coin>> data = new MediatorLiveData<>();
 
     public DataRepository(Context applicationContext) {
         AppDatabase database = AppDatabase.getDatabase(applicationContext);
@@ -22,15 +23,15 @@ public class DataRepository {
     }
 
     public void fetchData() {
-        this.data = sampleDao.getAll();
+        this.data.addSource(sampleDao.getAll(), data::setValue);
     }
 
     public void fetchDataByName(boolean order) {
-        this.data = sampleDao.getAllOrderByName(order);
+        this.data.addSource(sampleDao.getAllOrderByName(order), data::setValue);
     }
 
     public void fetchDataByPrice(boolean order) {
-        this.data = sampleDao.getAllOrderByPrice(order);
+        this.data.addSource(sampleDao.getAllOrderByPrice(order), data::setValue);
     }
 
     public void insertData(Coin sampleModel) {
