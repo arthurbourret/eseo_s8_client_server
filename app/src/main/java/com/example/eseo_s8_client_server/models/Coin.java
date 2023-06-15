@@ -10,8 +10,7 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "coin_table")
 public class Coin {
 
-    @NonNull
-    @PrimaryKey()
+    @ColumnInfo(name = "uuid")
     private final String uuid;
 
     @ColumnInfo(name = "icon_url")
@@ -29,7 +28,12 @@ public class Coin {
     @ColumnInfo(name = "description")
     private final String description;
 
-    @ColumnInfo(name = "rank")
+    @NonNull
+    @PrimaryKey()
+    /**
+     * Primary key pour s'assurer qu'il y ai bien uniquement
+     * les 50 premiers coins d'afficher
+     */
     private final Integer rank;
 
     @ColumnInfo(name = "change")
@@ -48,7 +52,7 @@ public class Coin {
     private boolean favorite;
 
     public Coin(@NonNull String uuid, String iconUrl, String symbol, String name,
-                String color, String description, Integer rank, Float change,
+                String color, String description, @NonNull Integer rank, Float change,
                 Float price, String marketCap, String volume24H) {
         this.uuid = uuid;
         this.iconUrl = iconUrl;
@@ -88,6 +92,7 @@ public class Coin {
         return description;
     }
 
+    @NonNull
     public Integer getRank() {
         return rank;
     }

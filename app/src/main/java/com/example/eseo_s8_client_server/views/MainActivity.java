@@ -2,7 +2,6 @@ package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,40 +43,39 @@ public class MainActivity extends AppCompatActivity {
         String colPrice = string(R.string.col_price);
         String colName = string(R.string.col_name);
         String colRank = string(R.string.col_rank);
-        binding.orderName.setOnClickListener(v -> {
-            binding.orderPrice.setText(colPrice);
-            binding.orderRank.setText(colRank);
-            Boolean order = viewModel.orderByName();
 
-            String message = colName;
-            if (order != null) message += order ? " ▴" : " ▾";
-            ((TextView) v).setText(message);
+        binding.orderName.setOnClickListener(v -> {
+            Boolean order = viewModel.orderByName();
+            String col = getBtnOrderName(colName, order);
+            setBtnOrderName(col, colPrice, colRank);
         });
 
         binding.orderPrice.setOnClickListener(v -> {
-            binding.orderName.setText(colName);
-            binding.orderRank.setText(colRank);
             Boolean order = viewModel.orderByPrice();
-
-            String message = colPrice;
-            if (order != null) message += order ? " ▴" : " ▾";
-            ((TextView) v).setText(message);
+            String col = getBtnOrderName(colPrice, order);
+            setBtnOrderName(colName, col, colRank);
         });
 
         binding.orderRank.setOnClickListener(v -> {
-            binding.orderName.setText(colName);
-            binding.orderPrice.setText(colPrice);
             Boolean order = viewModel.orderByRank();
-
-            String message = colRank;
-            if (order != null) message += order ? " ▴" : " ▾";
-            ((TextView) v).setText(message);
+            String col = getBtnOrderName(colRank, order);
+            setBtnOrderName(colName, colPrice, col);
         });
 
         viewModel.getOrderMessage().observe(this, message -> Toast
                 .makeText(MainActivity.this, message, Toast.LENGTH_SHORT)
                 .show()
         );
+    }
+
+    private String getBtnOrderName(String base, Boolean order) {
+        return base + (order == null ? "" : (order ? " ▴" : " ▾"));
+    }
+
+    private void setBtnOrderName(String colName, String colPrice, String colRank) {
+        binding.orderName.setText(colName);
+        binding.orderPrice.setText(colPrice);
+        binding.orderRank.setText(colRank);
     }
 
     private void initTabs() {
