@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private void initOrderBtn() {
         String colPrice = string(R.string.col_price);
         String colName = string(R.string.col_name);
-        String colRank = "Rank";
+        String colRank = string(R.string.col_rank);
         binding.orderName.setOnClickListener(v -> {
             binding.orderPrice.setText(colPrice);
             binding.orderRank.setText(colRank);

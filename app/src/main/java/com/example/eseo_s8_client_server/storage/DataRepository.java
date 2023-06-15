@@ -70,7 +70,7 @@ public class DataRepository {
     }
 
     public void fetchDataByRank(boolean order) {
-        column.postValue(order ? ColumnOrder.PRICE_ASC : ColumnOrder.PRICE_DESC);
+        column.postValue(order ? ColumnOrder.RANK_ASC : ColumnOrder.RANK_DESC);
     }
 
     public void insertData(Coin sampleModel) {

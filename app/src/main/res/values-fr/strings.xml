@@ -7,6 +7,7 @@
     <string name="order_by">Ordonner par</string>
     <string name="col_price">Prix</string>
     <string name="col_name">Nom</string>
+    <string name="col_rank">Rang</string>
 
     <string name="tab_all">Tous</string>
     <string name="tab_favs">Favoris</string>

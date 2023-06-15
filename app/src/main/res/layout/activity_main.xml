@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="1dp"
-            android:text="Rank"
+            android:text="@string/col_rank"
             android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/orderPrice"
             app:layout_constraintTop_toTopOf="parent" />

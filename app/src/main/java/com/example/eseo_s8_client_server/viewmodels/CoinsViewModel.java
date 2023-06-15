@@ -142,10 +142,10 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     }
 
     public Boolean orderByRank() {
-        if (Objects.equals(orderColumn, "rank") && order) {
+        if (Objects.equals(orderColumn, "rank") && !order) {
             return noOrder();
         } else {
-            boolean boolOrder = Objects.equals(orderColumn, "rank");
+            boolean boolOrder = !Objects.equals(orderColumn, "rank");
             this.orderColumn = "rank";
             this.order = boolOrder;
 
