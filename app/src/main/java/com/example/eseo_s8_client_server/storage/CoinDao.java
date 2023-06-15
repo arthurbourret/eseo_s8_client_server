@@ -29,4 +29,9 @@ public interface CoinDao {
             "CASE WHEN :order = 1 THEN price END ASC, \n" +
             "CASE WHEN :order = 0 THEN price END DESC")
     LiveData<List<Coin>> getAllOrderByPrice(boolean order);
+
+    @Query("SELECT * FROM coin_table ORDER BY " +
+            "CASE WHEN :order = 1 THEN rank END ASC, \n" +
+            "CASE WHEN :order = 0 THEN rank END DESC")
+    LiveData<List<Coin>> getAllOrderByRank(boolean order);
 }

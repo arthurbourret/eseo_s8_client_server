@@ -20,7 +20,9 @@ public class DataRepository {
         PRICE_ASC,
         PRICE_DESC,
         NAME_ASC,
-        NAME_DESC
+        NAME_DESC,
+        RANK_ASC,
+        RANK_DESC
     }
 
     public DataRepository(Context applicationContext) {
@@ -41,6 +43,10 @@ public class DataRepository {
                     return sampleDao.getAllOrderByName(true);
                 case NAME_DESC:
                     return sampleDao.getAllOrderByName(false);
+                case RANK_ASC:
+                    return sampleDao.getAllOrderByRank(true);
+                case RANK_DESC:
+                    return sampleDao.getAllOrderByRank(false);
             }
             return null;
         });
@@ -60,6 +66,10 @@ public class DataRepository {
     }
 
     public void fetchDataByPrice(boolean order) {
+        column.postValue(order ? ColumnOrder.PRICE_ASC : ColumnOrder.PRICE_DESC);
+    }
+
+    public void fetchDataByRank(boolean order) {
         column.postValue(order ? ColumnOrder.PRICE_ASC : ColumnOrder.PRICE_DESC);
     }
 
