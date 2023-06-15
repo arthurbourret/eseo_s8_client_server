@@ -2,6 +2,7 @@ package com.example.eseo_s8_client_server.views;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +35,37 @@ public class MainActivity extends AppCompatActivity {
         this.initTabs();
         this.initRecyclerCoinView();
         this.initViewModel();
+        this.initSearchBar();
         this.initSyncBtn();
         this.initOrderBtn();
+    }
+
+    private void initSearchBar() {
+        String colName = string(R.string.col_name);
+        String colPrice = string(R.string.col_price);
+        String colRank = string(R.string.col_rank);
+
+        // remove search
+        binding.search.setOnCloseListener(() -> {
+            viewModel.noOrder();
+            setBtnOrderName(colName, colPrice, colRank);
+            return false;
+        });
+
+        // when search
+        binding.search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                viewModel.searchName(s);
+                setBtnOrderName(colName, colPrice, getBtnOrderName(colRank, true));
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -62,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             setBtnOrderName(colName, colPrice, col);
         });
 
-        viewModel.getOrderMessage().observe(this, message -> Toast
+        viewModel.getFilterMessage().observe(this, message -> Toast
                 .makeText(MainActivity.this, message, Toast.LENGTH_SHORT)
                 .show()
         );

@@ -4,6 +4,7 @@
     <string name="fetch">Récupération des données</string>
     <string name="snc_btn">sync button</string>
 
+    <string name="search">Chercher par nom</string>
     <string name="order_by">Ordonner par</string>
     <string name="col_price">Prix</string>
     <string name="col_name">Nom</string>

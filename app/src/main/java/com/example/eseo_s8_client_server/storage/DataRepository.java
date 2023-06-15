@@ -14,6 +14,7 @@ public class DataRepository {
     private final CoinDao sampleDao;
     private final LiveData<List<Coin>> data;
     private final MutableLiveData<ColumnOrder> column = new MutableLiveData<>();
+    private String nameLike = "";
 
     public enum ColumnOrder {
         NONE,
@@ -22,7 +23,8 @@ public class DataRepository {
         NAME_ASC,
         NAME_DESC,
         RANK_ASC,
-        RANK_DESC
+        RANK_DESC,
+        NAME_LIKE
     }
 
     public DataRepository(Context applicationContext) {
@@ -47,6 +49,8 @@ public class DataRepository {
                     return sampleDao.getAllOrderByRank(true);
                 case RANK_DESC:
                     return sampleDao.getAllOrderByRank(false);
+                case NAME_LIKE:
+                    return sampleDao.getAllLike(nameLike);
             }
             return null;
         });
@@ -71,6 +75,12 @@ public class DataRepository {
 
     public void fetchDataByRank(boolean order) {
         column.postValue(order ? ColumnOrder.RANK_ASC : ColumnOrder.RANK_DESC);
+    }
+
+    public void fetchDataByNameLike(String name) {
+        if (name == null) name = "";
+        this.nameLike = "%" + name.toLowerCase() + "%";
+        column.postValue(ColumnOrder.NAME_LIKE);
     }
 
     public void insertData(Coin sampleModel) {

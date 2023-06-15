@@ -34,4 +34,7 @@ public interface CoinDao {
             "CASE WHEN :order = 1 THEN rank END ASC, \n" +
             "CASE WHEN :order = 0 THEN rank END DESC")
     LiveData<List<Coin>> getAllOrderByRank(boolean order);
+
+    @Query("SELECT * FROM coin_table WHERE LOWER(name) LIKE :name ORDER BY rank ASC")
+    LiveData<List<Coin>> getAllLike(String name);
 }

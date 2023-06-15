@@ -37,8 +37,8 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     private final DataRepository dataRepository;
     private Onglet current = Onglet.TOUS;
 
-    private final MutableLiveData<String> orderMessage = new MutableLiveData<>();
-    private String orderColumn;
+    private final MutableLiveData<String> filterMessage = new MutableLiveData<>();
+    private String filterColumn;
     private boolean order;
 
     private final PreferencesHelper preferences = PreferencesHelper.getInstance();
@@ -70,8 +70,8 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         return errorMessage;
     }
 
-    public LiveData<String> getOrderMessage() {
-        return orderMessage;
+    public LiveData<String> getFilterMessage() {
+        return filterMessage;
     }
 
     public void fetchData(Object... parameters) {
@@ -105,55 +105,61 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     }
 
     public Boolean noOrder() {
-        orderColumn = null;
+        filterColumn = null;
         dataRepository.fetchData();
-        orderMessage.postValue("Reset order");
+        filterMessage.postValue("Reset order");
         return null;
     }
 
     public Boolean orderByName() {
-        if (Objects.equals(orderColumn, "name") && !order) {
+        if (Objects.equals(filterColumn, "name") && !order) {
             return noOrder();
         } else {
-            boolean boolOrder = !Objects.equals(orderColumn, "name");
-            this.orderColumn = "name";
+            boolean boolOrder = !Objects.equals(filterColumn, "name");
+            this.filterColumn = "name";
             this.order = boolOrder;
 
             dataRepository.fetchDataByName(boolOrder);
-            orderMessage.postValue("Order by name " + (boolOrder ? "▴" : "▾"));
+            filterMessage.postValue("Order by name " + (boolOrder ? "▴" : "▾"));
 
             return boolOrder;
         }
     }
 
     public Boolean orderByPrice() {
-        if (Objects.equals(orderColumn, "price") && order) {
+        if (Objects.equals(filterColumn, "price") && order) {
             return noOrder();
         } else {
-            boolean boolOrder = Objects.equals(orderColumn, "price");
-            this.orderColumn = "price";
+            boolean boolOrder = Objects.equals(filterColumn, "price");
+            this.filterColumn = "price";
             this.order = boolOrder;
 
             dataRepository.fetchDataByPrice(boolOrder);
-            orderMessage.postValue("Order by price " + (boolOrder ? "▴" : "▾"));
+            filterMessage.postValue("Order by price " + (boolOrder ? "▴" : "▾"));
 
             return boolOrder;
         }
     }
 
     public Boolean orderByRank() {
-        if (Objects.equals(orderColumn, "rank") && !order) {
+        if (Objects.equals(filterColumn, "rank") && !order) {
             return noOrder();
         } else {
-            boolean boolOrder = !Objects.equals(orderColumn, "rank");
-            this.orderColumn = "rank";
+            boolean boolOrder = !Objects.equals(filterColumn, "rank");
+            this.filterColumn = "rank";
             this.order = boolOrder;
 
             dataRepository.fetchDataByRank(boolOrder);
-            orderMessage.postValue("Order by rank " + (boolOrder ? "▴" : "▾"));
+            filterMessage.postValue("Order by rank " + (boolOrder ? "▴" : "▾"));
 
             return boolOrder;
         }
+    }
+
+    public void searchName(String name) {
+        filterColumn = "search";
+        dataRepository.fetchDataByNameLike(name);
+        filterMessage.postValue("Search '" + name + "'");
     }
 
     @SuppressLint("NotifyDataSetChanged")
