@@ -22,7 +22,7 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
     }
 
     @Override
-    public void fetchData(Object... parameters) {
+    public void fetchData(Object... parameters) { // TODO: pourquoi le varargs ? on devrait avoid un String
         if (parameters == null || parameters.length < 1 || !(parameters[0] instanceof String))
             return;
         String uuid = (String) parameters[0];
@@ -35,10 +35,12 @@ public class CoinViewModel extends ViewModel implements IViewModel<Coin> {
                                            @NonNull Response<CoinResponse> response) {
                         if (!response.isSuccessful() || response.body() == null) return;
                         handleResponse(response.body());
+                        // TODO: gestion des erreurs
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<CoinResponse> call, @NonNull Throwable t) {
+                        // TODO: gestion des erreurs
                     }
                 });
     }

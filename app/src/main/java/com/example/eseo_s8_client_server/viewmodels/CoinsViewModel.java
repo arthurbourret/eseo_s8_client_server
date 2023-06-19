@@ -74,6 +74,7 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         return filterMessage;
     }
 
+    // TODO: pourquoi le varargs ?
     public void fetchData(Object... parameters) {
         RetrofitNetworkManager.coinRankingAPI
                 .getCoinsResponse()
@@ -111,6 +112,7 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         return null;
     }
 
+    // TODO: méthodes simplifiables et mise en commun possible
     public Boolean orderByName() {
         if (Objects.equals(filterColumn, "name") && !order) {
             return noOrder();
@@ -178,6 +180,7 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
         }
     };
 
+    // TODO: bizarre d'aller modifier un objet qui se trouve dans le prefs helper
     private void getFavoriteFromPrefs(List<Coin> coins) {
         List<String> favorites = preferences.getFavoriteCoinsIds();
         if (favorites == null || favorites.size() < 1) return;
@@ -188,6 +191,7 @@ public class CoinsViewModel extends AndroidViewModel implements IViewModel<List<
     }
 
     private void handleResponse(CoinsResponse response) {
+        // TODO: ligne inutile, en mettant à jour la BDD la donnée redescend automatiquement
         this.coins.setCoinList(response.getData());
         saveCoins(coins.getCoins());
     }

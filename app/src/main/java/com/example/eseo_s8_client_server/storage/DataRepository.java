@@ -83,6 +83,7 @@ public class DataRepository {
         column.postValue(ColumnOrder.NAME_LIKE);
     }
 
+    // TODO: nom de paramètre peu explicite
     public void insertData(Coin sampleModel) {
         AppDatabase.databaseWriteExecutor.execute(() -> sampleDao.insert(sampleModel));
     }
